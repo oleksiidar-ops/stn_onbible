@@ -86,8 +86,9 @@ p{margin:0}
 .j-prog{fill:none; stroke:url(#j-grad); stroke-width:4; stroke-linecap:round}
 .j-live{transition:opacity .9s ease}
 .j-live.fade{opacity:0}
-.j-dot{fill:#fff}
-.j-halo{fill:var(--acc); opacity:.28}
+.j-dot{fill:#fff; transition:opacity .35s ease}
+.j-halo{fill:var(--acc); opacity:.28; transition:opacity .35s ease}
+.done .j-dot,.done .j-halo{opacity:0}
 .j-start{fill:var(--b300)}
 .j-letter{fill:#fff; font-family:var(--display); font-weight:800; font-size:62px; letter-spacing:-.02em}
 .j-end{fill:rgba(255,255,255,.35); transition:fill .6s ease}
