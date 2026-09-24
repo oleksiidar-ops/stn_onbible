@@ -68,6 +68,7 @@ p{margin:0}
 .img .cap svg{width:20px; height:20px; flex:none}
 .img.has-mock::after,.img.has-mock .cap{display:none}
 .img .mock{position:absolute; inset:0; width:100%; height:100%; z-index:0}
+.img .drive{position:absolute; inset:0; width:100%; height:100%; border:0; z-index:1; background:#000}
 .img .play{position:absolute; z-index:2; left:50%; top:50%; width:64px; height:64px; margin:-32px 0 0 -32px; border-radius:50%; background:rgba(255,255,255,.95); display:grid; place-items:center}
 .img .play::before{content:""; margin-left:5px; border-left:18px solid var(--b900); border-top:11px solid transparent; border-bottom:11px solid transparent}
 
@@ -807,19 +808,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
     </div>
   </div>
   <div class="media">
-    <div class="img main has-mock" data-slot="kirill-studio"><svg class="mock" viewBox="0 0 700 394" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="m-studio">
-        <defs><radialGradient id="st-bg" cx="60%" cy="30%" r="80%"><stop offset="0" stop-color="#2A3FB5"/><stop offset="1" stop-color="#0B1133"/></radialGradient></defs>
-        <rect width="700" height="394" fill="url(#st-bg)"/>
-        <path class="st-vf" d="M24 58V24h34M642 24h34v34M676 336v34h-34M58 370H24v-34"/>
-        <circle class="st-rec" cx="52" cy="52" r="6"/><text x="66" y="57" class="st-t">REC</text>
-        <text x="648" y="57" class="st-t st-tc" text-anchor="end">00:00:00:00</text>
-        <g class="st-wave"></g>
-        <g class="st-lt">
-          <rect x="44" y="296" width="330" height="58" fill="rgba(11,17,51,.72)"/><rect x="44" y="296" width="4" height="58" fill="#FF7F2A"/>
-          <text x="64" y="321" class="st-name ru">Кирилл Андреев</text><text x="64" y="321" class="st-name en">Kirill Andreev</text>
-          <text x="64" y="343" class="st-sub ru">Исследуем Библию на английском</text><text x="64" y="343" class="st-sub en">Bible study in English</text>
-        </g>
-      </svg><span class="cap"><svg><use href="#i-photo"/></svg><span class="ru">Фото: Кирилл в студии</span><span class="en">Photo: Kirill in the studio</span></span></div>
+    <div class="img main has-mock" data-slot="kirill-studio"><iframe class="drive" title="Episode 1" data-src="https://drive.google.com/file/d/1CPB75NGLNK3iu0gcq7MW2-IEWBFI7GLl/preview" allow="autoplay; fullscreen" allowfullscreen></iframe><span class="cap"><svg><use href="#i-photo"/></svg><span class="ru">Фото: Кирилл в студии</span><span class="en">Photo: Kirill in the studio</span></span></div>
     <div class="thumbs">
       <div class="img" data-slot="kirill-v1"><span class="play"></span><span class="cap ru">Видео 1</span><span class="cap en">Video 1</span></div>
       <div class="img" data-slot="kirill-v2"><span class="play"></span><span class="cap ru">Видео 2</span><span class="cap en">Video 2</span></div>
@@ -1056,6 +1045,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   function el(tag, attrs, parent){ var e=document.createElementNS(NS2,tag); for(var k in attrs) e.setAttribute(k, attrs[k]); if(parent) parent.appendChild(e); return e; }
 
   // Count-up numbers when a slide comes into view
+  function loadEmbeds(root){ root.querySelectorAll('.img iframe[data-src]').forEach(function(f){ if(!f.getAttribute('src')) f.src=f.dataset.src; }); }
   function runCounts(root){
     if(reduced) return;
     root.querySelectorAll('.cnt').forEach(function(c){
@@ -1064,7 +1054,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
     });
   }
   if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting && isFlow()) runCounts(en.target); }); }, {threshold:.35});
+    var io=new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting && isFlow()){ runCounts(en.target); loadEmbeds(en.target); } }); }, {threshold:.35});
     document.querySelectorAll('.slide').forEach(function(sl){ io.observe(sl); });
   }
 
@@ -1173,6 +1163,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
     i=Math.max(0, Math.min(slides.length-1, i));
     slides[cur].classList.remove('on'); cur=i; slides[cur].classList.add('on');
     if(!isFlow()) runCounts(slides[cur]);
+    loadEmbeds(slides[cur]);
     count.textContent=(cur+1)+' / '+slides.length;
     bar.style.width=((cur+1)/slides.length*100)+'%';
   }
