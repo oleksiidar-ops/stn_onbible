@@ -730,46 +730,52 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
       c.setAttribute('cx',CX+RW*Math.cos(a)); c.setAttribute('cy',CY+RW*Math.sin(a)); c.setAttribute('r',6);
       wallG.appendChild(c); dots.push({el:c,a:a});
     }
-    var ripples=[0,1,2].map(function(){ var c=document.createElementNS(NS,'circle'); c.setAttribute('r',0); ripG.appendChild(c); return c; });
-
-    // four signals: first three stop at the wall, the fourth reaches the person
-    var HITS=[{src:0,t:600},{src:1,t:2800},{src:2,t:5000},{src:0,t:7200}], FLY=1300, CYCLE=12000;
+    // many signals: slow at first, then faster and faster; only the very last one reaches the person
+    var HITS=[], t=500, gap=1100, order=[0,1,2,0,2,1];
+    for(var n=0;n<30;n++){
+      var fly=Math.max(520, 1300*Math.pow(.93,n));
+      HITS.push({src:order[n%order.length], t:t, fly:fly});
+      t+=gap; gap=Math.max(120, gap*.83);
+    }
+    var LAST=HITS[HITS.length-1], LAND=LAST.t+LAST.fly, CYCLE=LAND+3200, TOP=100;
+    function mk(cls){ var c=document.createElementNS(NS,'circle'); if(cls) c.setAttribute('class',cls); return c; }
+    HITS.forEach(function(h){
+      h.sig=mk('r-sig'); h.sig.setAttribute('r',6); svg.insertBefore(h.sig, count);
+      h.rip=mk(); ripG.appendChild(h.rip);
+      var s=srcPos(h.src), dx=CX-s.x, dy=CY-s.y, D=Math.sqrt(dx*dx+dy*dy);
+      h.s=s; h.ux=dx/D; h.uy=dy/D; h.stop=D-RW-8; h.D=D;
+    });
+    sig.style.display='none';
     function srcPos(k){ var c=srcs[k].querySelector('circle'); return {x:+c.getAttribute('cx'), y:+c.getAttribute('cy')}; }
     function easeIn(x){ return x*x; }
 
     function render(t){
-      var hits=0, active=null;
+      var hits=0, live={};
       HITS.forEach(function(h,i){
-        var e=t-h.t;
-        if(e>=FLY) hits=i+1;
-        else if(e>=0) active={h:h,i:i,p:e/FLY};
+        var e=t-h.t, last=i===HITS.length-1;
+        if(e>=h.fly){ hits++; h.sig.style.opacity=0; }
+        else if(e>=0){
+          var q=easeIn(e/h.fly)*(last ? h.D-14 : h.stop);
+          h.sig.setAttribute('cx', h.s.x+h.ux*q); h.sig.setAttribute('cy', h.s.y+h.uy*q); h.sig.style.opacity=1; live[h.src]=1;
+        } else h.sig.style.opacity=0;
+        var r=e-h.fly;
+        if(last || r<0 || r>800){ h.rip.style.opacity=0; }
+        else { var k=h.stop; h.rip.setAttribute('cx', h.s.x+h.ux*k); h.rip.setAttribute('cy', h.s.y+h.uy*k);
+               h.rip.setAttribute('r', 8+r/800*30); h.rip.style.opacity=(1-r/800)*.7; h.rip.style.strokeWidth=2; }
       });
       var through=hits>=HITS.length;
-      // wall thins with every signal
-      var op=through ? .12 : 1-hits*.24;
+      var op=through ? .1 : 1-.8*hits/HITS.length;
       dots.forEach(function(d){ d.el.style.opacity=op; });
-      srcs.forEach(function(g,k){ g.classList.toggle('on', !!active && active.h.src===k); });
-      count.textContent='×'+Math.max(1, hits+(active?1:0));
-      if(active){
-        var s=srcPos(active.h.src), last=active.i===HITS.length-1;
-        var dx=CX-s.x, dy=CY-s.y, D=Math.sqrt(dx*dx+dy*dy), stop=last ? D-14 : D-RW-8;
-        var q=easeIn(active.p)*stop;
-        sig.setAttribute('cx', s.x+dx/D*q); sig.setAttribute('cy', s.y+dy/D*q); sig.style.opacity=1;
-      } else sig.style.opacity=0;
-      // ripple where each blocked signal hit the wall
-      ripples.forEach(function(r,i){
-        var e=t-HITS[i].t-FLY;
-        if(e<0 || e>900){ r.style.opacity=0; return; }
-        var s=srcPos(HITS[i].src), dx=CX-s.x, dy=CY-s.y, D=Math.sqrt(dx*dx+dy*dy), k=(D-RW-8)/D;
-        r.setAttribute('cx', s.x+dx*k); r.setAttribute('cy', s.y+dy*k);
-        r.setAttribute('r', 8+e/900*34); r.style.opacity=(1-e/900)*.8; r.style.strokeWidth=2;
-      });
+      srcs.forEach(function(g,k){ g.classList.toggle('on', !!live[k]); });
+      // counter races ahead of the visible shots: every signal stands for many real encounters
+      var c=Math.max(1, Math.round((TOP-1)*Math.pow(hits/(HITS.length-1), 1.8)));
+      count.textContent= through ? '×'+TOP+'+' : '×'+Math.min(c, TOP-1);
       svg.classList.toggle('lit', through);
-      var be=t-HITS[3].t-FLY;
+      var be=t-LAND;
       if(be>=0 && be<1400){ burst.setAttribute('r', 30+be/1400*150); burst.style.opacity=(1-be/1400)*.7; } else burst.style.opacity=0;
     }
 
-    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ render(HITS[3].t+FLY+2000); return; }
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ render(LAND+2000); return; }
     var t0=null;
     function frame(now){ if(t0===null) t0=now; render((now-t0)%CYCLE); requestAnimationFrame(frame); }
     requestAnimationFrame(frame);
