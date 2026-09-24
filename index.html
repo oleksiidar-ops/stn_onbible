@@ -79,6 +79,36 @@ p{margin:0}
 .s-title .facts b{font-family:var(--display); font-weight:800; font-size:22px; color:var(--white)}
 .s-title .facts span{font-size:17px; color:var(--b200)}
 
+/* Title: looping journey animation A → Я */
+.hero-anim{background:radial-gradient(520px 520px at 70% 18%, rgba(255,127,42,.16), transparent 60%), linear-gradient(170deg, var(--b700) 0%, var(--b900) 70%)}
+.hero-anim svg{position:absolute; inset:0; width:100%; height:100%; z-index:1; overflow:visible}
+.j-track{fill:none; stroke:rgba(201,211,250,.28); stroke-width:2; stroke-dasharray:1 11; stroke-linecap:round}
+.j-prog{fill:none; stroke:url(#j-grad); stroke-width:4; stroke-linecap:round}
+.j-live{transition:opacity .9s ease}
+.j-live.fade{opacity:0}
+.j-dot{fill:#fff}
+.j-halo{fill:var(--acc); opacity:.28}
+.j-start{fill:var(--b300)}
+.j-letter{fill:#fff; font-family:var(--display); font-weight:800; font-size:62px; letter-spacing:-.02em}
+.j-end{fill:rgba(255,255,255,.35); transition:fill .6s ease}
+.j-stop circle{fill:var(--b900); stroke:rgba(201,211,250,.5); stroke-width:2; transition:fill .45s ease, stroke .45s ease}
+.j-stop text{fill:rgba(201,211,250,.45); font-family:var(--display); font-weight:700; font-size:19px; transition:fill .45s ease}
+.j-stop.on circle{fill:#fff; stroke:#fff}
+.j-stop.on text{fill:#fff}
+.j-goal-c{fill:var(--b900); stroke:rgba(201,211,250,.5); stroke-width:2; transition:fill .5s ease, stroke .5s ease}
+.j-goal-tick{fill:none; stroke:rgba(201,211,250,.5); stroke-width:3; stroke-linecap:round; stroke-linejoin:round; transition:stroke .5s ease}
+.j-goal-ring{fill:none; stroke:var(--acc); stroke-width:2; opacity:0; transform-box:fill-box; transform-origin:center}
+.j-goal-t{fill:rgba(201,211,250,.45); font-family:var(--display); font-weight:800; font-size:20px; transition:fill .5s ease}
+.done .j-goal-c{fill:var(--acc); stroke:var(--acc)}
+.done .j-goal-tick{stroke:#fff}
+.done .j-goal-t{fill:#fff}
+.done .j-end{fill:var(--acc)}
+.done .j-goal-ring{animation:ring 1.4s ease-out infinite}
+@keyframes ring{0%{opacity:.8; transform:scale(.7)}100%{opacity:0; transform:scale(1.9)}}
+.j-stars circle{fill:#C9D3FA; animation:twinkle 4s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.08}50%{opacity:.55}}
+@media (prefers-reduced-motion: reduce){.j-stars circle,.done .j-goal-ring{animation:none}}
+
 /* 2 — Challenge */
 .s-chal .cols{display:grid; grid-template-columns:1.05fr 1fr; gap:80px; margin-top:auto; margin-bottom:auto; align-items:center}
 .s-chal .quote{font-family:var(--display); font-weight:700; font-size:34px; line-height:1.35; letter-spacing:-.01em; padding-left:32px; border-left:4px solid var(--acc)}
@@ -197,6 +227,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   .slide:not(.dark):not(.deep):not(.glow):not(.glow2):not(.soft){background:var(--white)}
   .ctrl{top:calc(10px + env(safe-area-inset-top, 0px)); bottom:auto; right:10px}
   .ctrl-nav,.bar{display:none}
+  body.idle .ctrl{opacity:1; pointer-events:auto}
   .num-tag{display:none}
 
   .eyebrow{font-size:12px; gap:10px; margin-bottom:16px}
@@ -207,7 +238,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   .lead{font-size:17px; margin-top:16px}
 
   .s-title{flex-direction:column; align-items:stretch; gap:36px; padding-top:0; padding-right:20px}
-  .s-title .img{order:-1; flex:none; align-self:auto; height:300px; margin:0 -20px}
+  .s-title .img{order:-1; flex:none; align-self:auto; height:480px; margin:0 -20px}
+  .hero-anim svg{top:56px; height:calc(100% - 64px)}
   .s-title .facts{flex-wrap:wrap; gap:18px 28px; margin-top:32px; padding-top:22px}
   .s-title .facts b{font-size:18px}
   .s-title .facts span{font-size:14px}
@@ -319,7 +351,35 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
       <div><b>EN</b><span class="ru">новый проект на английском</span><span class="en">new English project</span></div>
     </div>
   </div>
-  <div class="img" data-slot="hero-studio"><span class="cap"><svg><use href="#i-photo"/></svg><span class="ru">Фото: студия, запись с Кириллом</span><span class="en">Photo: studio recording with Kirill</span></span></div>
+  <div class="img hero-anim" aria-hidden="true">
+    <svg id="journey" viewBox="0 0 620 900" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="j-grad" gradientUnits="userSpaceOnUse" x1="0" y1="800" x2="0" y2="150">
+          <stop offset="0" stop-color="#9DB0F5"/><stop offset=".55" stop-color="#C9D3FA"/><stop offset="1" stop-color="#FF7F2A"/>
+        </linearGradient>
+        <filter id="j-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g class="j-stars"></g>
+      <path class="j-track" d="M150 790 C 330 800, 520 760, 480 660 S 220 600, 232 510 S 490 440, 470 350 S 230 290, 246 220 S 330 150, 420 150"/>
+      <g class="j-live">
+        <path class="j-prog" filter="url(#j-glow)" d="M150 790 C 330 800, 520 760, 480 660 S 220 600, 232 510 S 490 440, 470 350 S 230 290, 246 220 S 330 150, 420 150"/>
+      </g>
+      <g class="j-stops"></g>
+      <circle class="j-start" cx="150" cy="790" r="9"/>
+      <text class="j-letter" x="150" y="866" text-anchor="middle">A</text>
+      <g class="j-goal">
+        <circle class="j-goal-ring" cx="420" cy="150" r="26"/>
+        <circle class="j-goal-c" cx="420" cy="150" r="17"/>
+        <path class="j-goal-tick" d="M412 150l6 6 11-12"/>
+      </g>
+      <text class="j-letter j-end ru" x="420" y="92" text-anchor="middle">Я</text>
+      <text class="j-letter j-end en" x="420" y="92" text-anchor="middle">Z</text>
+      <text class="j-goal-t ru" x="458" y="157">Своя церковь</text>
+      <text class="j-goal-t en" x="458" y="157">A local church</text>
+      <circle class="j-halo" r="18"/>
+      <circle class="j-dot" r="7"/>
+    </svg>
+  </div>
 </section>
 
 <!-- 2 -->
@@ -545,6 +605,64 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   if(location.hash==='#en') lang='en'; if(location.hash==='#ru') lang='ru';
   setLang(lang);
   document.querySelectorAll('.ctrl-lang button').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.l); }); });
+
+  // Title animation: a light travels the road from A to Я, lighting each step, then loops
+  (function(){
+    var svg=document.getElementById('journey'); if(!svg) return;
+    var NS='http://www.w3.org/2000/svg';
+    var track=svg.querySelector('.j-track'), prog=svg.querySelector('.j-prog'), live=svg.querySelector('.j-live');
+    var dot=svg.querySelector('.j-dot'), halo=svg.querySelector('.j-halo');
+    var L=track.getTotalLength();
+    prog.style.strokeDasharray=L+' '+L;
+
+    // steps sit on the outer bends of the road
+    var steps=[{x:480,y:660,ru:'Видео',en:'Video'},{x:232,y:510,ru:'Курс OnBible',en:'OnBible course'},
+               {x:470,y:350,ru:'Вопросы',en:'Questions'},{x:246,y:220,ru:'Личная связь',en:'Personal contact'}];
+    var stopsG=svg.querySelector('.j-stops');
+    steps.forEach(function(st){
+      var best=0, bd=1e9;
+      for(var l=0;l<=L;l+=2){ var q=track.getPointAtLength(l), d=(q.x-st.x)*(q.x-st.x)+(q.y-st.y)*(q.y-st.y); if(d<bd){bd=d; best=l;} }
+      st.len=best; var pt=track.getPointAtLength(best), right=pt.x>310;
+      var g=document.createElementNS(NS,'g'); g.setAttribute('class','j-stop');
+      var c=document.createElementNS(NS,'circle'); c.setAttribute('cx',pt.x); c.setAttribute('cy',pt.y); c.setAttribute('r',10); g.appendChild(c);
+      ['ru','en'].forEach(function(lg){
+        var t=document.createElementNS(NS,'text'); t.setAttribute('class',lg);
+        t.setAttribute('x', right ? pt.x+22 : pt.x-22); t.setAttribute('y', pt.y+6);
+        t.setAttribute('text-anchor', right ? 'start' : 'end'); t.textContent=st[lg]; g.appendChild(t);
+      });
+      stopsG.appendChild(g); st.el=g;
+    });
+
+    var stars=svg.querySelector('.j-stars');
+    [[60,120],[250,70],[560,260],[40,420],[590,560],[300,880],[560,840],[230,330],[380,520],[60,640],[520,40],[330,250]].forEach(function(p,i){
+      var c=document.createElementNS(NS,'circle'); c.setAttribute('cx',p[0]); c.setAttribute('cy',p[1]); c.setAttribute('r', i%3?1.6:2.4);
+      c.style.animationDelay=(-i*0.7)+'s'; stars.appendChild(c);
+    });
+
+    function place(len, t){
+      var pt=track.getPointAtLength(len);
+      dot.setAttribute('cx',pt.x); dot.setAttribute('cy',pt.y);
+      halo.setAttribute('cx',pt.x); halo.setAttribute('cy',pt.y);
+      halo.setAttribute('r', 15+4*Math.sin(t/180));
+      prog.style.strokeDashoffset=L-len;
+      steps.forEach(function(st){ st.el.classList.toggle('on', len>=st.len-1); });
+    }
+    function ease(x){ return x<.5 ? 2*x*x : 1-Math.pow(-2*x+2,2)/2; }
+
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ place(L,0); svg.classList.add('done'); return; }
+
+    var TRAVEL=8000, HOLD=2200, FADE=1000, CYCLE=TRAVEL+HOLD+FADE, t0=null;
+    function frame(now){
+      if(t0===null) t0=now;
+      var t=(now-t0)%CYCLE;
+      if(t<TRAVEL){ live.classList.remove('fade'); svg.classList.remove('done'); place(ease(t/TRAVEL)*L, now); }
+      else if(t<TRAVEL+HOLD){ place(L, now); svg.classList.add('done'); }
+      else { live.classList.add('fade'); svg.classList.remove('done'); steps.forEach(function(st){ st.el.classList.remove('on'); });
+             var pt=track.getPointAtLength(0); dot.setAttribute('cx',pt.x); dot.setAttribute('cy',pt.y); halo.setAttribute('cx',pt.x); halo.setAttribute('cy',pt.y); }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
 
   var slides=[].slice.call(document.querySelectorAll('.slide')), cur=0;
   var count=document.getElementById('count'), bar=document.getElementById('bar');
