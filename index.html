@@ -194,38 +194,7 @@ p{margin:0}
   .case-steps::after{transform:none; animation:none !important}
 }
 
-/* 4 — Approach */
-.s-ring .wrap{flex:1; display:grid; grid-template-columns:600px 1fr; gap:72px; align-items:center; margin-top:8px}
-.ring{width:600px; height:auto}
-.ring .track{fill:none; stroke:rgba(201,211,250,.28); stroke-width:1.5}
-.ring .flow{fill:none; stroke:var(--acc); stroke-width:2.5; stroke-dasharray:4 10; stroke-linecap:round; animation:spin 40s linear infinite; transform-origin:300px 250px}
-@keyframes spin{to{transform:rotate(360deg)}}
-@media (prefers-reduced-motion: reduce){.ring .flow{animation:none}}
-.ring .core{fill:var(--white)}
-.ring .core-t{fill:var(--b900); font-family:var(--display); font-size:26px; font-weight:800}
-.ring .node{fill:var(--b900); stroke:var(--b200); stroke-width:2}
-.ring .lbl{fill:var(--white); font-family:var(--display); font-size:20px; font-weight:800}
-.ring .sub{fill:var(--b200); font-family:var(--body); font-size:16px}
-.s-ring .pts{display:grid; gap:0}
-.s-ring .pts div{padding:24px 0; border-top:1px solid rgba(201,211,250,.22); display:grid; gap:6px}
-.s-ring .pts div:last-child{border-bottom:1px solid rgba(201,211,250,.22)}
-.s-ring .pts b{font-family:var(--display); font-weight:800; font-size:23px}
-.s-ring .pts span{font-size:19px; color:var(--b200); line-height:1.5}
-
-/* 5 — Journey */
-.path{list-style:none; padding:0; margin:auto 0 0; display:grid; grid-template-columns:repeat(5,1fr); gap:0; position:relative}
-.path::before{content:""; position:absolute; left:0; right:0; top:27px; height:2px; background:var(--b200)}
-.path li{position:relative; padding-right:32px; display:grid; gap:12px; align-content:start}
-.path .dot{position:relative; width:56px; height:56px; border-radius:50%; display:grid; place-items:center; font-family:var(--display); font-weight:800; font-size:22px; background:var(--white); border:2px solid var(--b500); color:var(--b700); margin-bottom:14px}
-.path li:nth-child(2) .dot{background:var(--b100)}
-.path li:nth-child(3) .dot{background:var(--b200)}
-.path li:nth-child(4) .dot{background:var(--b500); color:var(--white)}
-.path li.goal .dot{background:var(--acc); border-color:var(--acc); color:var(--white)}
-.path p{font-size:18px; line-height:1.5; color:var(--muted)}
-.s-path .note{margin-top:auto; display:flex; gap:28px; align-items:center; background:var(--b50); border-left:4px solid var(--acc); padding:28px 36px; font-size:22px; line-height:1.45}
-.s-path .note b{font-family:var(--display); font-weight:800}
-
-/* 6 — Platform */
+/* 4 — Platform */
 .s-plat .top{display:flex; justify-content:space-between; align-items:flex-end; gap:60px}
 .s-plat .top .lead{margin-top:0; max-width:520px; font-size:21px}
 .s-plat .shots{display:grid; grid-template-columns:1.7fr 1fr 1fr; gap:22px; margin-top:44px; height:330px}
@@ -238,7 +207,7 @@ p{margin:0}
 .s-plat .langs{position:absolute; right:112px; top:92px; display:flex; gap:8px}
 .s-plat .langs span{font-size:14px; font-weight:600; padding:6px 14px; border-radius:999px; background:var(--white); border:1px solid var(--b200); color:var(--b700)}
 
-/* 7 — English */
+/* 5 — English */
 .s-eng{flex-direction:row; gap:72px; align-items:center}
 .s-eng .txt{flex:1 1 0}
 .s-eng ul{list-style:none; padding:0; margin:36px 0 0; display:grid; gap:14px}
@@ -256,7 +225,7 @@ p{margin:0}
 .s-eng .thumbs .img .play::before{border-left-width:12px; border-top-width:7px; border-bottom-width:7px; margin-left:3px}
 .s-eng .thumbs .cap{font-size:13px; left:12px; bottom:10px}
 
-/* 8 — Invitation */
+/* 6 — Invitation */
 .s-end .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:auto}
 .s-end .col{background:rgba(255,255,255,.07); border:1px solid rgba(201,211,250,.2); border-radius:12px; padding:30px 30px 34px; display:grid; gap:10px; align-content:start}
 .s-end .col .k{font-family:var(--display); font-weight:800; font-size:14px; letter-spacing:.14em; color:var(--acc)}
@@ -349,22 +318,6 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   .case-steps h4{font-size:16px}
   .case-steps p{font-size:13.5px; line-height:1.4}
   .case-foot{margin-top:16px; font-size:14px; padding:12px 14px}
-  .s-ring .wrap{grid-template-columns:1fr; gap:24px; margin-top:24px}
-  .ring{width:100%}
-  .ring .lbl{font-size:28px}
-  .ring .sub{font-size:22px}
-  .s-ring .pts div{padding:18px 0}
-  .s-ring .pts b{font-size:19px}
-  .s-ring .pts span{font-size:16px}
-
-  .path{grid-template-columns:1fr; margin:36px 0 0}
-  .path::before{left:21px; right:auto; top:8px; bottom:8px; width:2px; height:auto}
-  .path li{grid-template-columns:44px 1fr; column-gap:18px; row-gap:4px; padding:0 0 26px}
-  .path .dot{grid-row:span 2; width:44px; height:44px; font-size:17px; margin:0}
-  .path h3{align-self:center; padding-top:10px}
-  .path p{font-size:16px}
-  .s-path .note{margin-top:12px; padding:20px 22px; font-size:17px}
-
   .s-plat .langs{position:static; flex-wrap:wrap; margin-bottom:24px}
   .s-plat .langs span{font-size:12px; padding:5px 12px}
   .s-plat .top{flex-direction:column; align-items:stretch; gap:0}
@@ -424,7 +377,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   <div class="ctrl-nav">
     <span class="sep" aria-hidden="true"></span>
     <button type="button" id="prev" aria-label="Previous slide">←</button>
-    <span class="count" id="count">1 / 8</span>
+    <span class="count" id="count">1 / 6</span>
     <button type="button" id="next" aria-label="Next slide">→</button>
   </div>
 </div>
@@ -572,85 +525,16 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
     <p class="lead ru">Русскоязычный проект «Сложных текстов нет» идёт по этому пути около восьми лет. Люди приходят к Богу и в церковь.</p>
     <p class="lead en">Our Russian-language project “No Difficult Texts” has followed this path for about eight years. People come to God and into the church.</p>
     <ul>
-      <li><span class="ru">Видео разбирают трудные места Писания</span><span class="en">Videos explain difficult passages of Scripture</span></li>
-      <li><span class="ru">Курсы на платформе OnBible углубляют тему</span><span class="en">Courses on the OnBible platform go deeper</span></li>
-      <li><span class="ru">Команда на связи и помогает найти церковь</span><span class="en">A team stays in touch and helps find a church</span></li>
+      <li><span class="ru">Видео разбирают трудные места Писания и ведут на курс по той же теме</span><span class="en">Videos explain difficult passages and link to a course on the same topic</span></li>
+      <li><span class="ru">На курсе можно задать вопрос богослову и получить наставника</span><span class="en">In the course, people can ask a theologian and get a mentor</span></li>
+      <li><span class="ru">Андрей и команда на связи. Когда у человека появляется желание найти церковь, они помогают</span><span class="en">Andrey and the team stay in touch. When someone wants to find a church, they help</span></li>
     </ul>
   </div>
   <div class="img" data-slot="stn-channel"><span class="cap"><svg><use href="#i-screen"/></svg><span class="ru">Скрин канала «Сложных текстов нет»</span><span class="en">Screenshot: “No Difficult Texts” channel</span></span></div>
 </section>
 
 <!-- 4 -->
-<section class="slide s-ring glow2" id="s4">
-  <span class="num-tag">04</span>
-  <p class="eyebrow"><span class="ru">Наш подход</span><span class="en">Our approach</span></p>
-  <h2 class="ru">Одна тема проходит через разные инструменты</h2>
-  <h2 class="en">One message through many tools</h2>
-  <div class="wrap">
-    <svg class="ring" viewBox="-60 0 720 500" role="img" aria-label="One theme in the centre, five tools around it">
-      <circle class="track" cx="300" cy="250" r="175"/>
-      <circle class="flow" cx="300" cy="250" r="175"/>
-      <circle class="core" cx="300" cy="250" r="78"/>
-      <g class="ru"><text class="core-t" x="300" y="246" text-anchor="middle">Одна</text><text class="core-t" x="300" y="276" text-anchor="middle">тема</text></g>
-      <g class="en"><text class="core-t" x="300" y="246" text-anchor="middle">One</text><text class="core-t" x="300" y="276" text-anchor="middle">message</text></g>
-      <circle class="node" cx="300" cy="75" r="11"/>
-      <circle class="node" cx="466" cy="196" r="11"/>
-      <circle class="node" cx="403" cy="392" r="11"/>
-      <circle class="node" cx="197" cy="392" r="11"/>
-      <circle class="node" cx="134" cy="196" r="11"/>
-      <g class="ru">
-        <text class="lbl" x="300" y="44" text-anchor="middle">Видео</text>
-        <text class="lbl" x="488" y="192">Курсы</text><text class="sub" x="488" y="220">на OnBible</text>
-        <text class="lbl" x="424" y="426">Вопросы</text><text class="sub" x="424" y="454">и наставник</text>
-        <text class="lbl" x="176" y="426" text-anchor="end">Личная</text><text class="sub" x="176" y="454" text-anchor="end">связь</text>
-        <text class="lbl" x="112" y="192" text-anchor="end">Помощь</text><text class="sub" x="112" y="220" text-anchor="end">найти церковь</text>
-      </g>
-      <g class="en">
-        <text class="lbl" x="300" y="44" text-anchor="middle">Videos</text>
-        <text class="lbl" x="488" y="192">Courses</text><text class="sub" x="488" y="220">on OnBible</text>
-        <text class="lbl" x="424" y="426">Questions</text><text class="sub" x="424" y="454">&amp; a mentor</text>
-        <text class="lbl" x="176" y="426" text-anchor="end">Personal</text><text class="sub" x="176" y="454" text-anchor="end">contact</text>
-        <text class="lbl" x="112" y="192" text-anchor="end">Finding</text><text class="sub" x="112" y="220" text-anchor="end">a church</text>
-      </g>
-    </svg>
-    <div class="pts">
-      <div><b class="ru">Каждый инструмент ведёт дальше</b><b class="en">Every tool leads to the next</b>
-        <span class="ru">Видео даёт ссылку на курс. Курс ведёт к вопросам и наставнику.</span>
-        <span class="en">A video links to a course. A course leads to questions and a mentor.</span></div>
-      <div><b class="ru">Человек остаётся в одной среде</b><b class="en">People stay in one environment</b>
-        <span class="ru">Он переходит от формата к формату и не теряет нить.</span>
-        <span class="en">They move between formats without losing the thread.</span></div>
-      <div><b class="ru">Рядом всегда живой человек</b><b class="en">A real person is always there</b>
-        <span class="ru">Личная связь с Андреем и командой идёт через весь путь.</span>
-        <span class="en">Personal contact with Andrey and the team runs through the whole path.</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- 5 -->
-<section class="slide s-path" id="s5">
-  <span class="num-tag">05</span>
-  <p class="eyebrow"><span class="ru">Путь человека</span><span class="en">The journey</span></p>
-  <h2 class="ru">Как человек приходит к желанию найти церковь</h2>
-  <h2 class="en">How people come to want a church of their own</h2>
-  <ol class="path">
-    <li><span class="dot">1</span><h3 class="ru">Видео</h3><h3 class="en">Video</h3>
-      <p class="ru">Встречает тему на канале. В описании — ссылка на курс.</p><p class="en">Finds a topic on the channel. The description links to a course.</p></li>
-    <li><span class="dot">2</span><h3 class="ru">Курс на OnBible</h3><h3 class="en">OnBible course</h3>
-      <p class="ru">Изучает тему по Писанию в своём темпе.</p><p class="en">Studies the topic in Scripture at their own pace.</p></li>
-    <li><span class="dot">3</span><h3 class="ru">Вопросы</h3><h3 class="en">Questions</h3>
-      <p class="ru">Спрашивает богослова и получает наставника.</p><p class="en">Asks a theologian and gets a mentor.</p></li>
-    <li><span class="dot">4</span><h3 class="ru">Личная связь</h3><h3 class="en">Personal contact</h3>
-      <p class="ru">Общается с Андреем и командой лично.</p><p class="en">Talks with Andrey and the team personally.</p></li>
-    <li class="goal"><span class="dot">✓</span><h3 class="ru">Своя церковь</h3><h3 class="en">A local church</h3>
-      <p class="ru">Люди на связи помогают найти общину рядом.</p><p class="en">Our team helps them find a congregation nearby.</p></li>
-  </ol>
-  <p class="note ru"><span><b>Желание искать церковь рождается у человека само.</b> Это итог пути, который он прошёл через разные инструменты.</span></p>
-  <p class="note en"><span><b>The desire to find a church grows on its own.</b> It is the fruit of a journey through many tools.</span></p>
-</section>
-
-<!-- 6 -->
-<section class="slide s-plat soft" id="s6">
+<section class="slide s-plat" id="s4">
   <div class="langs"><span>English</span><span>Русский</span><span>Українська</span></div>
   <div class="top">
     <div>
@@ -676,9 +560,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   </div>
 </section>
 
-<!-- 7 -->
-<section class="slide s-eng glow" id="s7">
-  <span class="num-tag">07</span>
+<!-- 5 -->
+<section class="slide s-eng glow" id="s5">
+  <span class="num-tag">05</span>
   <div class="txt">
     <p class="eyebrow"><span class="ru">Новый проект</span><span class="en">What’s next</span></p>
     <h2 class="ru">Тот же путь&nbsp;— теперь <span class="acc">на английском</span></h2>
@@ -706,9 +590,9 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   </div>
 </section>
 
-<!-- 8 -->
-<section class="slide s-end glow2" id="s8">
-  <span class="num-tag">08</span>
+<!-- 6 -->
+<section class="slide s-end glow2" id="s6">
+  <span class="num-tag">06</span>
   <p class="eyebrow"><span class="ru">Приглашение</span><span class="en">Join us</span></p>
   <h2 class="ru">Мы уже делаем это у вас. <span class="acc">Подключайтесь</span></h2>
   <h2 class="en">We’re already doing this with you. <span class="acc">Join in</span></h2>
