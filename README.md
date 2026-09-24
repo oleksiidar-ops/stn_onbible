@@ -17,4 +17,3 @@
 | `ob-course.jpg` | 6 — курс |
 | `ob-bible.jpg` | 6 — режим презентации |
 | `kirill-studio.jpg` | 7 — Кирилл в студии |
-| `kirill-v1.jpg` … `kirill-v3.jpg` | 7 — превью видео |

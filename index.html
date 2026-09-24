@@ -299,7 +299,12 @@ p{margin:0}
 .s-eng .who span{font-size:17px; color:var(--b200)}
 .s-eng .media{flex:0 0 700px; display:grid; gap:16px}
 .s-eng .media .main{height:394px}
-.s-eng .thumbs{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.s-eng .thumbs{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+.thumb{border:0; padding:0; cursor:pointer; font:inherit; outline:3px solid transparent; outline-offset:3px; transition:outline-color .2s ease, transform .2s ease}
+.thumb:hover{transform:translateY(-2px)}
+.thumb.on{outline-color:var(--acc)}
+.thumb.on .play{opacity:0}
+.thumb::before{content:""; position:absolute; inset:0; z-index:2; background:linear-gradient(180deg, transparent 45%, rgba(11,17,51,.75))}
 .s-eng .thumbs .img{height:124px}
 .s-eng .thumbs .img .play{width:40px; height:40px; margin:-20px 0 0 -20px}
 .s-eng .thumbs .img .play::before{border-left-width:12px; border-top-width:7px; border-bottom-width:7px; margin-left:3px}
@@ -810,9 +815,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   <div class="media">
     <div class="img main has-mock" data-slot="kirill-studio"><iframe class="drive" title="Episode 1" data-src="https://drive.google.com/file/d/1CPB75NGLNK3iu0gcq7MW2-IEWBFI7GLl/preview" allow="autoplay; fullscreen" allowfullscreen></iframe><span class="cap"><svg><use href="#i-photo"/></svg><span class="ru">Фото: Кирилл в студии</span><span class="en">Photo: Kirill in the studio</span></span></div>
     <div class="thumbs">
-      <div class="img" data-slot="kirill-v1"><span class="play"></span><span class="cap ru">Видео 1</span><span class="cap en">Video 1</span></div>
-      <div class="img" data-slot="kirill-v2"><span class="play"></span><span class="cap ru">Видео 2</span><span class="cap en">Video 2</span></div>
-      <div class="img" data-slot="kirill-v3"><span class="play"></span><span class="cap ru">Видео 3</span><span class="cap en">Video 3</span></div>
+      <button type="button" class="img thumb has-img on" data-vid="1CPB75NGLNK3iu0gcq7MW2-IEWBFI7GLl" aria-label="Episode 1"><img src="https://drive.google.com/thumbnail?id=1CPB75NGLNK3iu0gcq7MW2-IEWBFI7GLl&amp;sz=w480" alt="" loading="lazy"><span class="play"></span><span class="cap keep"><span class="ru">Эпизод 1</span><span class="en">Episode 1</span></span></button>
+      <button type="button" class="img thumb has-img" data-vid="12PQgjc72U2T_RT6QiatNwLm5KT11F6NW" aria-label="Episode 2"><img src="https://drive.google.com/thumbnail?id=12PQgjc72U2T_RT6QiatNwLm5KT11F6NW&amp;sz=w480" alt="" loading="lazy"><span class="play"></span><span class="cap keep"><span class="ru">Эпизод 2</span><span class="en">Episode 2</span></span></button>
+      <button type="button" class="img thumb has-img" data-vid="1sD-dQb37_w9DcL9LAKub3NeAzAb6lyrd" aria-label="Episode 3"><img src="https://drive.google.com/thumbnail?id=1sD-dQb37_w9DcL9LAKub3NeAzAb6lyrd&amp;sz=w480" alt="" loading="lazy"><span class="play"></span><span class="cap keep"><span class="ru">Эпизод 3</span><span class="en">Episode 3</span></span></button>
+      <button type="button" class="img thumb has-img" data-vid="1nRBnGLqKAA5PNdlxKn4Wdsh4W-FYoELu" aria-label="Episode 4"><img src="https://drive.google.com/thumbnail?id=1nRBnGLqKAA5PNdlxKn4Wdsh4W-FYoELu&amp;sz=w480" alt="" loading="lazy"><span class="play"></span><span class="cap keep"><span class="ru">Эпизод 4</span><span class="en">Episode 4</span></span></button>
     </div>
   </div>
 </section>
@@ -1155,6 +1161,15 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
     function frame(now){ if(t0===null) t0=now-9000; draw(now-t0); requestAnimationFrame(frame); }
     requestAnimationFrame(frame);
   })();
+
+  // Slide 5: episode thumbnails switch the main Drive player
+  document.querySelectorAll('.thumb[data-vid]').forEach(function(t){
+    t.addEventListener('click', function(){
+      var f=document.querySelector('.s-eng .drive'); if(!f) return;
+      f.src='https://drive.google.com/file/d/'+t.dataset.vid+'/preview';
+      document.querySelectorAll('.thumb').forEach(function(x){ x.classList.toggle('on', x===t); });
+    });
+  });
 
   var slides=[].slice.call(document.querySelectorAll('.slide')), cur=0;
   var count=document.getElementById('count'), bar=document.getElementById('bar');
