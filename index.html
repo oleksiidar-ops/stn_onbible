@@ -161,15 +161,18 @@ p{margin:0}
 .case-card h3{font-size:44px; letter-spacing:-.02em; line-height:1.1}
 .case-lead{font-size:21px; line-height:1.5; color:var(--muted); max-width:900px; margin-top:16px}
 .case-steps{list-style:none; padding:0; margin:52px 0 0; display:grid; grid-template-columns:repeat(5,1fr); gap:0; position:relative}
-.case-steps::before,.case-steps::after{content:""; position:absolute; left:0; right:calc(20% - 56px); top:27px; height:2px; background:var(--b100)}
+.case-steps::before,.case-steps::after{content:""; position:absolute; left:0; right:calc(20% - 12px); top:73px; height:2px; background:var(--b100)}
 .case-steps::after{background:linear-gradient(90deg, var(--b300), var(--b500) 60%, var(--acc)); transform:scaleX(0); transform-origin:left}
 .case.play .case-steps::after{animation:caseLine 3.5s linear forwards}
 @keyframes caseLine{to{transform:scaleX(1)}}
 .case-steps li{position:relative; padding-right:26px; display:grid; gap:8px; align-content:start; opacity:.25; transition:opacity .5s ease}
 .case.play .case-steps li{animation:caseIn .5s ease forwards; animation-delay:var(--t)}
 @keyframes caseIn{to{opacity:1}}
-.case-mk{position:relative; z-index:1; height:56px; display:flex; align-items:center; margin-bottom:10px}
-.touches{gap:5px; flex-wrap:wrap; align-content:center; max-width:190px; background:var(--white); padding-right:8px}
+.case-mk{position:relative; z-index:1; height:56px; display:flex; align-items:center; margin-bottom:42px}
+.case-steps li::after{content:""; position:absolute; left:0; top:68px; width:12px; height:12px; border-radius:50%; background:var(--b300); z-index:1}
+.case-steps li.key::after{background:var(--acc)}
+.case-steps li.done::after{background:var(--b900)}
+.touches{gap:5px; flex-wrap:wrap; align-content:center; max-width:190px}
 .touches i{width:9px; height:9px; border-radius:50%; background:var(--b500); opacity:0; transform:scale(.3)}
 .case.play .touches i{animation:dotIn .3s ease forwards; animation-delay:calc(.25s + var(--d) * 85ms)}
 @keyframes dotIn{to{opacity:1; transform:none}}
@@ -325,23 +328,27 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   .s-proof .img{flex:none; height:220px}
 
   .case-btn{margin-top:28px; font-size:17px; padding:12px 22px 12px 12px}
-  .case{position:fixed; z-index:40; place-items:start center; overflow-y:auto; padding:16px 12px 24px}
+  .case{position:fixed; z-index:40; place-items:center; overflow:hidden; padding:12px}
   body.modal-open{overflow:hidden}
-  .case-card{width:100%; padding:28px 20px 24px; border-radius:16px}
-  .case-x{right:12px; top:12px; width:38px; height:38px}
-  .case-card h3{font-size:30px}
-  .case-lead{font-size:16px}
-  .case-steps{grid-template-columns:1fr; margin-top:28px; gap:22px}
-  .case-steps::before,.case-steps::after{display:none}
-  .case-steps li{padding-right:0}
-  .case-mk{height:auto; min-height:40px; margin-bottom:4px}
-  .node{width:44px; height:44px}
-  .node svg{width:22px; height:22px}
-  .case-tag{position:static; order:-1}
-  .key{display:flex; flex-direction:column; gap:6px}
-  .case-steps h4{font-size:18px}
-  .case-steps p{font-size:15px}
-  .case-foot{margin-top:26px; font-size:16px; padding:16px 18px}
+  .case-card,.case.open .case-card{transform:none}
+  .case-card{width:100%; max-height:calc(100dvh - 24px); overflow-y:auto; overscroll-behavior:contain; padding:22px 18px 18px; border-radius:16px}
+  .case-x{position:fixed; right:20px; top:20px; z-index:3; width:38px; height:38px; box-shadow:0 4px 14px -4px rgba(11,17,51,.35)}
+  .case-card .eyebrow{margin-bottom:10px}
+  .case-card h3{font-size:26px; padding-right:44px}
+  .case-lead{font-size:15px; line-height:1.45; margin-top:10px}
+  .case-steps{grid-template-columns:1fr; margin-top:18px; gap:12px}
+  .case-steps::before,.case-steps::after,.case-steps li::after{display:none}
+  .case-steps li{padding-right:0; grid-template-columns:62px 1fr; column-gap:12px; row-gap:2px}
+  .case-mk{grid-column:1; grid-row:1 / span 3; height:auto; min-height:0; margin:0; align-self:start}
+  .case-steps h4,.case-steps p,.case-tag{grid-column:2}
+  .touches{max-width:62px; gap:4px; padding:4px 0 0}
+  .touches i{width:7px; height:7px}
+  .node{width:38px; height:38px}
+  .node svg{width:20px; height:20px}
+  .case-tag{position:static; font-size:11px}
+  .case-steps h4{font-size:16px}
+  .case-steps p{font-size:13.5px; line-height:1.4}
+  .case-foot{margin-top:16px; font-size:14px; padding:12px 14px}
   .s-ring .wrap{grid-template-columns:1fr; gap:24px; margin-top:24px}
   .ring{width:100%}
   .ring .lbl{font-size:28px}
@@ -390,6 +397,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   .s-end .cta a{font-size:20px; padding:16px 28px}
   .s-end .cta p{font-size:17px}
   .img .cap{font-size:13px; left:14px; bottom:12px}
+}
+@media (max-width: 900px) and (max-height: 740px), (orientation: portrait) and (max-height: 740px){
+  .case-steps p{display:none}
+  .case-steps{gap:10px}
 }
 @media (max-width: 380px){
   h1{font-size:38px}
