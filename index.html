@@ -323,10 +323,22 @@ p{margin:0}
 .st-sub{font-family:var(--body); font-size:14px; fill:var(--b200)}
 @media (prefers-reduced-motion: reduce){.st-rec,.st-wave rect,.m-verse{animation:none}.m-verse.v2{opacity:0}}
 
-/* 6 — Invitation */
-.s-end h2{max-width:760px}
-.end-art{position:absolute; right:100px; top:92px; width:560px}
+/* 6 — Partnership */
+.end-top{display:grid; grid-template-columns:1fr 600px; gap:48px; align-items:center}
+.s-end h2{max-width:none}
+.s-end .lead{max-width:720px}
+.end-art{width:600px}
 .end-art svg{width:100%; height:auto; overflow:visible}
+.end-cols{display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:auto}
+.end-col{background:rgba(255,255,255,.06); border:1px solid rgba(201,211,250,.2); border-radius:14px; padding:30px 34px 32px}
+.end-col.need{background:rgba(255,127,42,.08); border-color:rgba(255,127,42,.35)}
+.end-col .k{font-family:var(--display); font-weight:800; font-size:14px; letter-spacing:.14em; text-transform:uppercase; color:var(--b200); margin-bottom:18px}
+.end-col.need .k{color:var(--acc)}
+.end-col ul{list-style:none; margin:0; padding:0; display:grid; gap:14px}
+.end-col li{display:flex; gap:14px; align-items:baseline; font-size:21px; line-height:1.4; color:var(--white)}
+.end-col li::before{content:"✓"; flex:none; font-weight:700; color:var(--b300)}
+.end-col.need li::before{content:"→"; color:var(--acc)}
+.end-foot{margin-top:32px; font-family:var(--display); font-weight:800; font-size:26px; letter-spacing:-.01em; color:var(--white)}
 .mg-road{fill:none; stroke:rgba(201,211,250,.3); stroke-width:2; stroke-dasharray:1 10; stroke-linecap:round}
 .mg-main{stroke:rgba(201,211,250,.55); stroke-dasharray:none; stroke-width:3}
 .mg-l{font-family:var(--display); font-weight:800; font-size:22px; fill:#fff}
@@ -335,14 +347,6 @@ p{margin:0}
 .mg-goal{fill:var(--acc)}
 .mg-tick{fill:none; stroke:#fff; stroke-width:3; stroke-linecap:round; stroke-linejoin:round}
 .mg-ring{fill:none; stroke:var(--acc); stroke-width:2; transform-box:fill-box; transform-origin:center; animation:ring 1.6s ease-out infinite}
-.s-end .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:auto}
-.s-end .col{background:rgba(255,255,255,.07); border:1px solid rgba(201,211,250,.2); border-radius:12px; padding:30px 30px 34px; display:grid; gap:10px; align-content:start}
-.s-end .col .k{font-family:var(--display); font-weight:800; font-size:14px; letter-spacing:.14em; color:var(--acc)}
-.s-end .col p{font-size:18px; line-height:1.5; color:var(--b200)}
-.s-end .cta{margin-top:48px; display:flex; align-items:center; gap:36px}
-.s-end .cta a{display:inline-flex; align-items:center; gap:12px; background:var(--acc); color:var(--white); text-decoration:none; font-family:var(--display); font-weight:800; font-size:24px; padding:20px 34px; border-radius:999px}
-.s-end .cta a:hover{background:#FF9447}
-.s-end .cta p{font-size:21px; color:var(--b200)}
 
 /* ---------- Controls (outside the canvas) ---------- */
 .ctrl{position:fixed; z-index:20; right:12px; bottom:calc(12px + env(safe-area-inset-bottom, 0px)); display:flex; align-items:center; gap:6px; padding:5px; border-radius:999px; background:rgba(11,17,51,.72); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px)}
@@ -826,36 +830,50 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
 <!-- 6 -->
 <section class="slide s-end glow2" id="s6">
   <span class="num-tag">06</span>
-  <p class="eyebrow"><span class="ru">Приглашение</span><span class="en">Join us</span></p>
-  <h2 class="ru">Мы уже делаем это у&nbsp;вас. <span class="acc">Подключайтесь</span></h2>
-  <h2 class="en">We’re already doing this with you. <span class="acc">Join in</span></h2>
-  <div class="end-art" aria-hidden="true">
-    <svg id="merge" viewBox="0 0 560 300">
-      <path class="mg-road" id="mg-ru" d="M60 70 C 170 70, 210 150, 320 150"/>
-      <path class="mg-road" id="mg-en" d="M60 230 C 170 230, 210 150, 320 150"/>
-      <path class="mg-road mg-main" id="mg-common" d="M320 150 L 488 150"/>
-      <text class="mg-l" x="44" y="76" text-anchor="end">RU</text><text class="mg-l mg-en" x="44" y="236" text-anchor="end">EN</text>
-      <text class="mg-s ru" x="60" y="48">8 лет</text><text class="mg-s en" x="60" y="48">8 years</text>
-      <text class="mg-s ru" x="60" y="262">запуск</text><text class="mg-s en" x="60" y="262">launching</text>
-      <g class="mg-dots"></g>
-      <circle class="mg-ring" cx="512" cy="150" r="24"/>
-      <circle class="mg-goal" cx="512" cy="150" r="22"/>
-      <path class="mg-tick" d="M502 150l7 7 13-14"/>
-    </svg>
+  <div class="end-top">
+    <div>
+      <p class="eyebrow"><span class="ru">Партнёрство</span><span class="en">Partnership</span></p>
+      <h2 class="ru">Давайте продолжим путь <span class="acc">вместе</span></h2>
+      <h2 class="en">Let’s walk this path <span class="acc">together</span></h2>
+      <p class="lead ru">Путь проверен восемью годами работы. Теперь мы открываем его англоязычной аудитории и ищем партнёров, которые помогут сделать это в полную силу.</p>
+      <p class="lead en">Eight years of work have proven this path. Now we are opening it to an English-speaking audience, and we are looking for partners to help us do it at full strength.</p>
+    </div>
+    <div class="end-art" aria-hidden="true">
+      <svg id="merge" viewBox="0 0 640 320">
+        <path class="mg-road" id="mg-ru" d="M150 80 C 270 80, 300 160, 400 160"/>
+        <path class="mg-road" id="mg-en" d="M150 240 C 270 240, 300 160, 400 160"/>
+        <path class="mg-road mg-main" id="mg-common" d="M400 160 L 566 160"/>
+        <text class="mg-l ru" x="134" y="86" text-anchor="end">Мы</text><text class="mg-l en" x="134" y="86" text-anchor="end">We</text>
+        <text class="mg-s ru" x="134" y="108" text-anchor="end">8 лет опыта</text><text class="mg-s en" x="134" y="108" text-anchor="end">8 years of experience</text>
+        <text class="mg-l mg-en ru" x="134" y="246" text-anchor="end">Партнёр</text><text class="mg-l mg-en en" x="134" y="246" text-anchor="end">Partner</text>
+        <text class="mg-s ru" x="134" y="268" text-anchor="end">ресурсы и связи</text><text class="mg-s en" x="134" y="268" text-anchor="end">resources and reach</text>
+        <g class="mg-dots"></g>
+        <circle class="mg-ring" cx="592" cy="160" r="26"/>
+        <circle class="mg-goal" cx="592" cy="160" r="24"/>
+        <path class="mg-tick" d="M581 160l7.5 7.5 14-15"/>
+      </svg>
+    </div>
   </div>
-  <div class="cols">
-    <div class="col"><span class="k ru">ПРОВЕРЕНО</span><span class="k en">PROVEN</span><h3 class="ru">8 лет на русском</h3><h3 class="en">8 years in Russian</h3>
-      <p class="ru">Путь уже приводит людей к Богу и в церковь.</p><p class="en">The path already brings people to God and to church.</p></div>
-    <div class="col"><span class="k ru">ЗАПУСКАЕТСЯ</span><span class="k en">LAUNCHING</span><h3 class="ru">Проект на английском</h3><h3 class="en">An English project</h3>
-      <p class="ru">С Кириллом Андреевым для англоязычной аудитории.</p><p class="en">With Kirill Andreev for English-speaking audiences.</p></div>
-    <div class="col"><span class="k ru">ГОТОВО</span><span class="k en">READY</span><h3 class="ru">Платформа OnBible</h3><h3 class="en">The OnBible platform</h3>
-      <p class="ru">Берите и используйте. Остальной путь мы поддержим.</p><p class="en">Take it and use it. We’ll support the rest of the journey.</p></div>
+  <div class="end-cols">
+    <div class="end-col">
+      <p class="k ru">Что у нас уже есть</p><p class="k en">What we already have</p>
+      <ul>
+        <li><span class="ru">Проверенный путь: 8 лет работы на русском</span><span class="en">A proven path: 8 years of work in Russian</span></li>
+        <li><span class="ru">Платформа OnBible на трёх языках</span><span class="en">The OnBible platform in three languages</span></li>
+        <li><span class="ru">Первые эпизоды на английском уже записаны</span><span class="en">The first English episodes are already recorded</span></li>
+      </ul>
+    </div>
+    <div class="end-col need">
+      <p class="k ru">Где нужна поддержка</p><p class="k en">Where support matters</p>
+      <ul>
+        <li><span class="ru">Производство новых видео на английском</span><span class="en">Producing new videos in English</span></li>
+        <li><span class="ru">Продвижение канала к новой аудитории</span><span class="en">Growing the channel’s reach to a new audience</span></li>
+        <li><span class="ru">Сопровождение людей на всём пути</span><span class="en">Walking with people along the whole path</span></li>
+      </ul>
+    </div>
   </div>
-  <div class="cta">
-    <a href="https://on-bible.com" target="_blank" rel="noopener">on-bible.com ↗</a>
-    <p class="ru">Вместе мы проведём по этому пути гораздо больше людей.</p>
-    <p class="en">Together we can lead many more people along this path.</p>
-  </div>
+  <p class="end-foot ru">Вместе мы проведём по этому пути гораздо больше людей.</p>
+  <p class="end-foot en">Together we can lead many more people along this path.</p>
 </section>
 
 </div>
@@ -1139,7 +1157,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
     var svg=document.getElementById('merge'); if(!svg) return;
     var ru=svg.querySelector('#mg-ru'), en=svg.querySelector('#mg-en'), common=svg.querySelector('#mg-common'), g=svg.querySelector('.mg-dots');
     var Lc=common.getTotalLength();
-    var streams=[{p:ru,L:ru.getTotalLength(),every:420,col:'#C9D3FA',off:0},{p:en,L:en.getTotalLength(),every:1150,col:'#FF7F2A',off:300}];
+    var streams=[{p:ru,L:ru.getTotalLength(),every:520,col:'#C9D3FA',off:0},{p:en,L:en.getTotalLength(),every:520,col:'#FF7F2A',off:260}];
     var SPEED=.085, pool=[];
     for(var i=0;i<40;i++) pool.push(el('circle',{r:5,cx:-99,cy:-99},g));
     function at(s,d){ return d<s.L ? s.p.getPointAtLength(d) : common.getPointAtLength(Math.min(Lc,d-s.L)); }
