@@ -168,7 +168,7 @@ p{margin:0}
 .stats b span{font-size:inherit; color:inherit}
 
 /* 3 — Case modal (the Sabbath) */
-.case-btn{margin-top:32px; display:inline-flex; align-items:center; gap:14px; border:0; cursor:pointer; background:var(--b900); color:var(--white); font-family:var(--display); font-weight:800; font-size:20px; padding:16px 28px 16px 16px; border-radius:999px; box-shadow:0 14px 30px -14px rgba(11,17,51,.6); transition:background .2s ease, transform .2s ease}
+.case-btn{white-space:nowrap; margin-top:32px; display:inline-flex; align-items:center; gap:14px; border:0; cursor:pointer; background:var(--b900); color:var(--white); font-family:var(--display); font-weight:800; font-size:20px; padding:16px 28px 16px 16px; border-radius:999px; box-shadow:0 14px 30px -14px rgba(11,17,51,.6); transition:background .2s ease, transform .2s ease}
 .case-btn:hover{background:var(--b800); transform:translateY(-1px)}
 .case-btn-i{width:34px; height:34px; border-radius:50%; background:var(--acc); position:relative; flex:none}
 .case-btn-i::before{content:""; position:absolute; left:13px; top:10px; border-left:11px solid #fff; border-top:7px solid transparent; border-bottom:7px solid transparent}
@@ -239,6 +239,25 @@ p{margin:0}
 /* 4 — Platform */
 .s-plat .top{display:flex; justify-content:space-between; align-items:flex-end; gap:60px}
 .s-plat .top .lead{margin-top:0; max-width:520px; font-size:21px}
+.plat-side{display:grid; gap:18px; justify-items:start}
+.s-plat .plat-side .langs{position:static; display:flex; gap:8px}
+.plat-side{grid-template-columns:auto 1fr; align-items:center; column-gap:20px}
+.plat-side .lead{grid-column:1 / -1}
+.plat-side .case-btn{margin-top:0; font-size:18px; padding:12px 24px 12px 12px}
+.plat-side .case-btn-i{width:30px; height:30px}
+.plat-side .case-btn-i::before{left:11px; top:8px}
+/* Live OnBible site in a browser-like window */
+.case-web .case-card{width:1480px; height:820px; padding:0; display:flex; flex-direction:column; overflow:hidden; border-radius:16px}
+.web-bar{flex:none; height:56px; display:flex; align-items:center; gap:16px; padding:0 14px 0 20px; background:var(--b50); border-bottom:1px solid var(--line)}
+.web-dots{display:flex; gap:8px}
+.web-dots i{width:12px; height:12px; border-radius:50%; background:var(--b200)}
+.web-url{flex:1; max-width:520px; margin:0 auto; text-align:center; font-size:15px; font-weight:500; color:var(--b900); background:var(--white); border:1px solid var(--line); border-radius:999px; padding:8px 16px}
+.web-ext{font-size:14px; font-weight:600; color:var(--b700); text-decoration:none; white-space:nowrap}
+.web-ext:hover{text-decoration:underline}
+.case-web .case-x{position:static; width:36px; height:36px; flex:none; background:var(--white); border:1px solid var(--line)}
+.web-frame{position:relative; flex:1; background:var(--white)}
+.web-frame iframe{position:absolute; inset:0; width:100%; height:100%; border:0; background:transparent}
+.web-wait{position:absolute; inset:0; display:grid; place-items:center; color:var(--muted); font-size:18px}
 .s-plat .shots{display:grid; grid-template-columns:1.7fr 1fr 1fr; gap:22px; margin-top:44px; height:330px}
 .s-plat .feats{display:grid; grid-template-columns:repeat(5,1fr); gap:0; margin-top:auto; border-top:1px solid var(--line)}
 .s-plat .feat{padding:24px 22px 0 0; display:grid; gap:6px; align-content:start}
@@ -681,15 +700,22 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
 
 <!-- 4 -->
 <section class="slide s-plat" id="s4">
-  <div class="langs"><span>English</span><span>Русский</span><span>Українська</span></div>
   <div class="top">
     <div>
       <p class="eyebrow"><span class="ru">Платформа OnBible</span><span class="en">The OnBible platform</span></p>
       <h2 class="ru">Мы учим людей изучать Библию самостоятельно</h2>
       <h2 class="en">We teach people to study the Bible for themselves</h2>
     </div>
-    <p class="lead ru">Бесплатная платформа, где собран весь путь. Её уже использует Андрей в своих разборах Писания.</p>
-    <p class="lead en">A free platform that holds the whole journey. Andrey already uses it in his Scripture studies.</p>
+    <div class="plat-side">
+      <p class="lead ru">Бесплатная платформа, где собран весь путь. Её уже использует Андрей в своих разборах Писания.</p>
+      <p class="lead en">A free platform that holds the whole journey. Andrey already uses it in his Scripture studies.</p>
+      <button type="button" class="case-btn" data-open="web" aria-haspopup="dialog" aria-controls="web">
+        <span class="case-btn-i" aria-hidden="true"></span>
+        <span class="ru">Открыть OnBible</span><span class="en">Open OnBible</span>
+        <span aria-hidden="true">→</span>
+      </button>
+      <div class="langs"><span>English</span><span>Русский</span><span>Українська</span></div>
+    </div>
   </div>
   <div class="shots">
     <div class="img has-mock" data-slot="ob-main"><svg class="mock" viewBox="0 0 612 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
@@ -743,6 +769,20 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
     <div class="feat"><h3 class="ru">Наставники</h3><h3 class="en">Mentors</h3><p class="ru">Вопросы богослову и сопровождение</p><p class="en">Ask a theologian, get guidance</p></div>
     <div class="feat"><h3 class="ru">Заметки</h3><h3 class="en">Notes</h3><p class="ru">Свои выводы рядом с текстом</p><p class="en">Your insights next to the text</p></div>
     <div class="feat"><h3 class="ru">Презентация</h3><h3 class="en">Presenting</h3><p class="ru">Стихи на экране во время урока</p><p class="en">Verses on screen while teaching</p></div>
+  </div>
+  <div class="case case-web" id="web" role="dialog" aria-modal="true" aria-label="OnBible" aria-hidden="true">
+    <div class="case-card">
+      <div class="web-bar">
+        <span class="web-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="web-url">on-bible.com</span>
+        <a class="web-ext" href="https://on-bible.com" target="_blank" rel="noopener"><span class="ru">Открыть в новой вкладке</span><span class="en">Open in a new tab</span> ↗</a>
+        <button type="button" class="case-x" aria-label="Close">✕</button>
+      </div>
+      <div class="web-frame">
+        <p class="web-wait"><span class="ru">Загружаем OnBible…</span><span class="en">Loading OnBible…</span></p>
+        <iframe title="OnBible" data-src="https://on-bible.com" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen; clipboard-write"></iframe>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -994,6 +1034,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   function caseIsOpen(){ return !!openModal; }
   function openCase(m, btn){
     m.classList.remove('play'); void m.offsetWidth;
+    var fr=m.querySelector('iframe[data-src]'); if(fr && !fr.getAttribute('src')) fr.src=fr.dataset.src;
     m.classList.add('open','play'); m.setAttribute('aria-hidden','false');
     body.classList.add('modal-open'); openModal=m; openerBtn=btn;
     m.querySelector('.case-x').focus({preventScroll:true}); m.scrollTop=0; m.querySelector('.case-card').scrollTop=0;
