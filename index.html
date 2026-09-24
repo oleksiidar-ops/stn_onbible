@@ -146,6 +146,51 @@ p{margin:0}
 .s-proof li::before{content:""; flex:none; width:8px; height:8px; background:var(--b500); transform:translateY(-3px)}
 .s-proof .img{flex:0 0 640px; height:500px}
 
+/* 3 — Case modal (the Sabbath) */
+.case-btn{margin-top:32px; display:inline-flex; align-items:center; gap:14px; border:0; cursor:pointer; background:var(--b900); color:var(--white); font-family:var(--display); font-weight:800; font-size:20px; padding:16px 28px 16px 16px; border-radius:999px; box-shadow:0 14px 30px -14px rgba(11,17,51,.6); transition:background .2s ease, transform .2s ease}
+.case-btn:hover{background:var(--b800); transform:translateY(-1px)}
+.case-btn-i{width:34px; height:34px; border-radius:50%; background:var(--acc); position:relative; flex:none}
+.case-btn-i::before{content:""; position:absolute; left:13px; top:10px; border-left:11px solid #fff; border-top:7px solid transparent; border-bottom:7px solid transparent}
+.case{position:absolute; inset:0; z-index:6; display:grid; place-items:center; background:rgba(11,17,51,.55); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); opacity:0; visibility:hidden; transition:opacity .3s ease, visibility 0s linear .3s}
+.case.open{opacity:1; visibility:visible; transition:opacity .3s ease}
+.case-card{position:relative; width:1260px; background:var(--white); border-radius:20px; padding:52px 64px 48px; box-shadow:0 40px 90px -30px rgba(11,17,51,.7); transform:translateY(16px); transition:transform .35s ease}
+.case.open .case-card{transform:none}
+.case-x{position:absolute; right:22px; top:22px; width:44px; height:44px; border-radius:50%; border:0; background:var(--b50); color:var(--b900); font-size:18px; cursor:pointer}
+.case-x:hover{background:var(--b100)}
+.case-card .eyebrow{margin-bottom:18px}
+.case-card h3{font-size:44px; letter-spacing:-.02em; line-height:1.1}
+.case-lead{font-size:21px; line-height:1.5; color:var(--muted); max-width:900px; margin-top:16px}
+.case-steps{list-style:none; padding:0; margin:52px 0 0; display:grid; grid-template-columns:repeat(5,1fr); gap:0; position:relative}
+.case-steps::before,.case-steps::after{content:""; position:absolute; left:0; right:calc(20% - 56px); top:27px; height:2px; background:var(--b100)}
+.case-steps::after{background:linear-gradient(90deg, var(--b300), var(--b500) 60%, var(--acc)); transform:scaleX(0); transform-origin:left}
+.case.play .case-steps::after{animation:caseLine 3.5s linear forwards}
+@keyframes caseLine{to{transform:scaleX(1)}}
+.case-steps li{position:relative; padding-right:26px; display:grid; gap:8px; align-content:start; opacity:.25; transition:opacity .5s ease}
+.case.play .case-steps li{animation:caseIn .5s ease forwards; animation-delay:var(--t)}
+@keyframes caseIn{to{opacity:1}}
+.case-mk{position:relative; z-index:1; height:56px; display:flex; align-items:center; margin-bottom:10px}
+.touches{gap:5px; flex-wrap:wrap; align-content:center; max-width:190px; background:var(--white); padding-right:8px}
+.touches i{width:9px; height:9px; border-radius:50%; background:var(--b500); opacity:0; transform:scale(.3)}
+.case.play .touches i{animation:dotIn .3s ease forwards; animation-delay:calc(.25s + var(--d) * 85ms)}
+@keyframes dotIn{to{opacity:1; transform:none}}
+.node{width:56px; justify-content:center; border-radius:50%; background:var(--b100)}
+.node svg{width:28px; height:28px; fill:none; stroke:var(--b700); stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+.key .node{background:var(--acc)}
+.key .node svg,.done .node svg{stroke:#fff}
+.done .node{background:var(--b900)}
+.case.play .key .node{animation:pulse 1.6s ease-out 3.1s 2}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,127,42,.55)}100%{box-shadow:0 0 0 22px rgba(255,127,42,0)}}
+.case-tag{position:absolute; top:-30px; left:0; font-family:var(--display); font-weight:800; font-size:13px; letter-spacing:.12em; text-transform:uppercase; color:var(--acc); white-space:nowrap}
+.case-steps h4{margin:0; font-family:var(--display); font-weight:800; font-size:21px; line-height:1.25}
+.case-steps p{font-size:16px; line-height:1.45; color:var(--muted)}
+.key h4{color:var(--acc)}
+.case-foot{margin-top:40px; padding:20px 26px; background:var(--b50); border-left:4px solid var(--acc); font-size:19px; line-height:1.45}
+.case-foot b{font-family:var(--display); font-weight:800}
+@media (prefers-reduced-motion: reduce){
+  .case-steps li,.touches i{opacity:1; transform:none; animation:none !important}
+  .case-steps::after{transform:none; animation:none !important}
+}
+
 /* 4 — Approach */
 .s-ring .wrap{flex:1; display:grid; grid-template-columns:600px 1fr; gap:72px; align-items:center; margin-top:8px}
 .ring{width:600px; height:auto}
@@ -279,6 +324,24 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   .s-proof li{font-size:17px; gap:12px}
   .s-proof .img{flex:none; height:220px}
 
+  .case-btn{margin-top:28px; font-size:17px; padding:12px 22px 12px 12px}
+  .case{position:fixed; z-index:40; place-items:start center; overflow-y:auto; padding:16px 12px 24px}
+  body.modal-open{overflow:hidden}
+  .case-card{width:100%; padding:28px 20px 24px; border-radius:16px}
+  .case-x{right:12px; top:12px; width:38px; height:38px}
+  .case-card h3{font-size:30px}
+  .case-lead{font-size:16px}
+  .case-steps{grid-template-columns:1fr; margin-top:28px; gap:22px}
+  .case-steps::before,.case-steps::after{display:none}
+  .case-steps li{padding-right:0}
+  .case-mk{height:auto; min-height:40px; margin-bottom:4px}
+  .node{width:44px; height:44px}
+  .node svg{width:22px; height:22px}
+  .case-tag{position:static; order:-1}
+  .key{display:flex; flex-direction:column; gap:6px}
+  .case-steps h4{font-size:18px}
+  .case-steps p{font-size:15px}
+  .case-foot{margin-top:26px; font-size:16px; padding:16px 18px}
   .s-ring .wrap{grid-template-columns:1fr; gap:24px; margin-top:24px}
   .ring{width:100%}
   .ring .lbl{font-size:28px}
@@ -422,6 +485,11 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
           <p class="ru">Наша цель — чтобы глубокое изучение Библии стало частью обычной жизни христианина. Сложное мы делаем доступным.</p>
           <p class="en">Our goal is to make deep Bible study part of everyday Christian life. We make the complex accessible.</p></div>
       </div>
+      <button type="button" class="case-btn" id="case-open" aria-haspopup="dialog" aria-controls="case">
+      <span class="case-btn-i" aria-hidden="true"></span>
+      <span class="ru">Пример: тема субботы</span><span class="en">Example: the Sabbath</span>
+      <span aria-hidden="true">→</span>
+    </button>
     </div>
     <div class="chal-art" aria-hidden="true">
       <svg id="repeat" viewBox="0 0 460 580">
@@ -451,6 +519,35 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
         <text class="r-cap ru" x="230" y="562" text-anchor="middle">повторение</text>
         <text class="r-cap en" x="230" y="562" text-anchor="middle">repetition</text>
       </svg>
+    </div>
+  </div>
+  <div class="case" id="case" role="dialog" aria-modal="true" aria-labelledby="case-title" aria-hidden="true">
+    <div class="case-card">
+      <button type="button" class="case-x" id="case-close" aria-label="Close">✕</button>
+      <p class="eyebrow"><span class="ru">Пример из практики</span><span class="en">A real example</span></p>
+      <h3 id="case-title"><span class="ru">Тема субботы</span><span class="en">The Sabbath</span></h3>
+      <p class="case-lead ru">Тема субботы звучала у нас в разных форматах. Один человек прошёл через все: смотрел видео, читал посты, а потом прошёл курс. Курс стал последней точкой. После него человек принял эту истину.</p>
+      <p class="case-lead en">We covered the Sabbath in many formats. One person went through all of them: watched the videos, read the posts, then took the course. The course became the final step. After it, they accepted this truth.</p>
+      <ol class="case-steps">
+        <li style="--t:.2s"><span class="case-mk touches" data-n="12" data-from="0"></span>
+          <h4 class="ru">Видео на канале</h4><h4 class="en">Channel videos</h4>
+          <p class="ru">Подробные разборы: что говорит Писание о субботе.</p><p class="en">In-depth studies of what Scripture says about the Sabbath.</p></li>
+        <li style="--t:1.2s"><span class="case-mk touches" data-n="10" data-from="12"></span>
+          <h4 class="ru">Короткие видео</h4><h4 class="en">Short videos</h4>
+          <p class="ru">Одна мысль за минуту. Тема снова попадается на глаза.</p><p class="en">One idea in a minute. The topic keeps coming back.</p></li>
+        <li style="--t:2.05s"><span class="case-mk touches" data-n="8" data-from="22"></span>
+          <h4 class="ru">Посты в Telegram</h4><h4 class="en">Telegram posts</h4>
+          <p class="ru">Тексты и вопросы между выпусками.</p><p class="en">Texts and questions between episodes.</p></li>
+        <li class="key" style="--t:2.9s"><span class="case-tag ru">Последняя точка</span><span class="case-tag en">Final step</span>
+          <span class="case-mk node"><svg viewBox="0 0 24 24"><path d="M4 6c3-2 6-2 8 0v13c-2-2-5-2-8 0zM12 6c2-2 5-2 8 0v13c-3-2-6-2-8 0z"/></svg></span>
+          <h4 class="ru">Курс на OnBible</h4><h4 class="en">OnBible course</h4>
+          <p class="ru">Человек сам проходит тему по Писанию, шаг за шагом.</p><p class="en">They study the topic in Scripture, step by step.</p></li>
+        <li class="done" style="--t:3.5s"><span class="case-mk node"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+          <h4 class="ru">Истина принята</h4><h4 class="en">Truth accepted</h4>
+          <p class="ru">Человек принял учение о субботе.</p><p class="en">They accepted the teaching on the Sabbath.</p></li>
+      </ol>
+      <p class="case-foot ru"><b>Каждый формат подготовил следующий.</b> Курс собрал всё в цельную картину из Писания.</p>
+      <p class="case-foot en"><b>Each format prepared the next.</b> The course brought it all together into one picture from Scripture.</p>
     </div>
   </div>
 </section>
@@ -781,9 +878,31 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
     requestAnimationFrame(frame);
   })();
 
+  // Slide 3: case study modal
+  var caseEl=document.getElementById('case'), caseOpenBtn=document.getElementById('case-open'), caseCloseBtn=document.getElementById('case-close');
+  caseEl.querySelectorAll('.touches').forEach(function(box){
+    var n=+box.dataset.n, from=+box.dataset.from;
+    for(var k=0;k<n;k++){ var i=document.createElement('i'); i.style.setProperty('--d', from+k); box.appendChild(i); }
+  });
+  function caseIsOpen(){ return caseEl.classList.contains('open'); }
+  function openCase(){
+    caseEl.classList.remove('play'); void caseEl.offsetWidth;
+    caseEl.classList.add('open','play'); caseEl.setAttribute('aria-hidden','false');
+    body.classList.add('modal-open'); caseCloseBtn.focus({preventScroll:true}); caseEl.scrollTop=0;
+  }
+  function closeCase(){
+    if(!caseIsOpen()) return;
+    caseEl.classList.remove('open'); caseEl.setAttribute('aria-hidden','true');
+    body.classList.remove('modal-open'); caseOpenBtn.focus({preventScroll:true});
+  }
+  caseOpenBtn.addEventListener('click', openCase);
+  caseCloseBtn.addEventListener('click', closeCase);
+  caseEl.addEventListener('click', function(e){ if(e.target===caseEl) closeCase(); });
+
   var slides=[].slice.call(document.querySelectorAll('.slide')), cur=0;
   var count=document.getElementById('count'), bar=document.getElementById('bar');
   function show(i){
+    closeCase();
     i=Math.max(0, Math.min(slides.length-1, i));
     slides[cur].classList.remove('on'); cur=i; slides[cur].classList.add('on');
     count.textContent=(cur+1)+' / '+slides.length;
@@ -793,6 +912,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   document.getElementById('prev').addEventListener('click', function(){ show(cur-1); });
   document.getElementById('next').addEventListener('click', function(){ show(cur+1); });
   document.addEventListener('keydown', function(e){
+    if(caseIsOpen()){ if(e.key==='Escape') closeCase(); return; }
     if(isFlow()) return;
     if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].indexOf(e.key)>-1 && !(e.target.closest && e.target.closest('a,button'))){ e.preventDefault(); show(cur+1); }
     else if(['ArrowRight','ArrowDown','PageDown'].indexOf(e.key)>-1){ e.preventDefault(); show(cur+1); }
@@ -802,7 +922,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
   var x0=null, y0=null;
   document.addEventListener('touchstart', function(e){ x0=e.touches[0].clientX; y0=e.touches[0].clientY; }, {passive:true});
   document.addEventListener('touchend', function(e){
-    if(x0===null || isFlow()) return;
+    if(x0===null || isFlow() || caseIsOpen()) return;
     var dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
     if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)) show(cur+(dx<0?1:-1));
     x0=null;
@@ -815,7 +935,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
 
   var wheelLock=false;
   document.addEventListener('wheel', function(e){
-    if(wheelLock || isFlow() || Math.abs(e.deltaY)<30) return;
+    if(wheelLock || isFlow() || caseIsOpen() || Math.abs(e.deltaY)<30) return;
     wheelLock=true; show(cur+(e.deltaY>0?1:-1)); setTimeout(function(){ wheelLock=false; }, 700);
   }, {passive:true});
 })();
