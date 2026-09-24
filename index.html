@@ -217,6 +217,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offse
 /* Real photo loaded into a slot: hide the placeholder caption and glow */
 .img.has-img::after,.img.has-img .cap:not(.keep){display:none}
 .img.has-img .play{z-index:3}
+.img[data-slot="stn-channel"] img{object-position:top center}
 
 /* ---------- Phones and portrait screens: slides become a scrolling page ---------- */
 @media (max-width: 900px), (orientation: portrait){
