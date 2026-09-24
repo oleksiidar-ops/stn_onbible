@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Путь от А до Я</title>
+<meta name="description" content="Как проект «Сложных текстов нет» и платформа OnBible ведут человека от первого видео до своей церкви.">
+<meta property="og:title" content="Путь от А до Я — OnBible">
+<meta property="og:description" content="От первого видео до своей церкви. Разные инструменты, одна тема и живые люди рядом на каждом шаге.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#111A4A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111A4A'/%3E%3Cpath d='M9 22l7-13 7 13' fill='none' stroke='%23FF7F2A' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Onest:wght@400;500;600&display=swap">
+<style>
+/* One deliberate look (deck), painted explicitly for any host theme.
+   Base: OnBible blue shades. One accent: orange. */
+:root{
+  color-scheme:light;
+  --b950:#0B1133; --b900:#111A4A; --b800:#1A2878; --b700:#2A3FB5; --b500:#5172EA; --b300:#9DB0F5; --b200:#C9D3FA; --b100:#E3E9FD; --b50:#F2F5FF;
+  --ink:#0F1430; --muted:#566084; --line:#DCE2F5; --white:#FFFFFF;
+  --acc:#FF7F2A; --acc-soft:#FFE7D6;
+  --display:"Manrope", "Helvetica Neue", Arial, sans-serif;
+  --body:"Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; overflow:hidden; background:var(--b950); color:var(--ink); font-family:var(--body); -webkit-font-smoothing:antialiased}
+body:not(.lang-en) .en, body.lang-en .ru{display:none !important}
+
+/* ---------- Stage: fixed 16:9 canvas scaled to the screen ---------- */
+.viewport{position:fixed; inset:0}
+.stage{position:absolute; left:50%; top:50%; width:1600px; height:900px; transform:translate(-50%,-50%); transform-origin:center center; overflow:hidden; background:var(--white)}
+.slide{position:absolute; inset:0; padding:92px 112px 96px; display:flex; flex-direction:column; opacity:0; visibility:hidden; transition:opacity .45s ease, visibility 0s linear .45s}
+.slide.on{opacity:1; visibility:visible; transition:opacity .45s ease}
+@media (prefers-reduced-motion: reduce){.slide,.slide.on{transition:none}}
+
+.dark{background:var(--b900); color:var(--white)}
+.deep{background:var(--b800); color:var(--white)}
+.soft{background:var(--b50)}
+.glow,.glow2{color:var(--white)}
+.glow{background:radial-gradient(1100px 700px at 85% 10%, rgba(81,114,234,.45), transparent 60%), var(--b900)}
+.glow2{background:radial-gradient(900px 600px at 10% 100%, rgba(81,114,234,.40), transparent 60%), var(--b800)}
+
+/* Type */
+.eyebrow{display:flex; align-items:center; gap:14px; margin:0 0 28px; font-family:var(--display); font-weight:800; font-size:16px; letter-spacing:.16em; text-transform:uppercase; color:var(--b700)}
+.eyebrow::before{content:""; width:36px; height:3px; background:var(--acc)}
+.dark .eyebrow,.deep .eyebrow,.glow .eyebrow,.glow2 .eyebrow{color:var(--b200)}
+h1,h2,h3{font-family:var(--display); margin:0; text-wrap:balance}
+h1{font-size:96px; font-weight:800; line-height:1.02; letter-spacing:-.025em}
+h2{font-size:58px; font-weight:800; line-height:1.08; letter-spacing:-.02em; max-width:1000px}
+h3{font-size:24px; font-weight:800; line-height:1.25; letter-spacing:-.005em}
+p{margin:0}
+.lead{font-size:25px; line-height:1.5; color:var(--muted); max-width:760px; margin-top:28px}
+.dark .lead,.glow .lead,.glow2 .lead,.deep .lead{color:var(--b200)}
+.acc{color:var(--acc)}
+.num-tag{position:absolute; right:112px; top:92px; font-family:var(--display); font-weight:700; font-size:16px; letter-spacing:.12em; color:var(--b300)}
+.dark .num-tag,.glow .num-tag,.glow2 .num-tag{color:rgba(201,211,250,.6)}
+
+/* Image slots (swap for <img> later) */
+.img{position:relative; overflow:hidden; border-radius:10px;
+  background:linear-gradient(160deg, var(--b700) 0%, var(--b900) 100%);
+  box-shadow:0 30px 60px -20px rgba(11,17,51,.45)}
+.img::after{content:""; position:absolute; inset:0; background:radial-gradient(600px 380px at 70% 20%, rgba(157,176,245,.35), transparent 65%)}
+.img img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:1}
+.img .cap{position:absolute; left:20px; bottom:18px; z-index:2; display:flex; align-items:center; gap:10px; color:rgba(255,255,255,.85); font-size:15px; font-weight:500}
+.img .cap svg{width:20px; height:20px; flex:none}
+.img .play{position:absolute; z-index:2; left:50%; top:50%; width:64px; height:64px; margin:-32px 0 0 -32px; border-radius:50%; background:rgba(255,255,255,.95); display:grid; place-items:center}
+.img .play::before{content:""; margin-left:5px; border-left:18px solid var(--b900); border-top:11px solid transparent; border-bottom:11px solid transparent}
+
+/* 1 — Title */
+.s-title{flex-direction:row; gap:72px; align-items:center; padding-right:0}
+.s-title .txt{flex:1 1 0; display:flex; flex-direction:column; justify-content:center}
+.s-title .img{flex:0 0 620px; align-self:stretch; margin:-92px 0 -96px; border-radius:0; box-shadow:none}
+.s-title h1 .acc{display:block}
+.s-title .facts{display:flex; gap:48px; margin-top:64px; padding-top:28px; border-top:1px solid rgba(201,211,250,.25)}
+.s-title .facts div{display:grid; gap:4px}
+.s-title .facts b{font-family:var(--display); font-weight:800; font-size:22px; color:var(--white)}
+.s-title .facts span{font-size:17px; color:var(--b200)}
+
+/* 2 — Challenge */
+.s-chal .cols{display:grid; grid-template-columns:1.05fr 1fr; gap:80px; margin-top:auto; margin-bottom:auto; align-items:center}
+.s-chal .quote{font-family:var(--display); font-weight:700; font-size:34px; line-height:1.35; letter-spacing:-.01em; padding-left:32px; border-left:4px solid var(--acc)}
+.s-chal .items{display:grid; gap:24px}
+.s-chal .it{padding:30px 34px; background:var(--b50); border-radius:12px; display:grid; gap:10px}
+.s-chal .it p{font-size:20px; line-height:1.5; color:var(--muted)}
+
+/* 3 — Proven */
+.s-proof{flex-direction:row; gap:80px; align-items:center}
+.s-proof .txt{flex:1 1 0}
+.s-proof .big{display:flex; align-items:flex-end; gap:24px}
+.s-proof .big b{font-family:var(--display); font-weight:800; font-size:220px; line-height:.8; letter-spacing:-.05em; color:var(--acc)}
+.s-proof .big span{font-family:var(--display); font-weight:800; font-size:36px; line-height:1.15; letter-spacing:-.01em; padding-bottom:10px; max-width:340px}
+.s-proof ul{list-style:none; padding:0; margin:40px 0 0; display:grid; gap:16px}
+.s-proof li{display:flex; gap:16px; align-items:baseline; font-size:21px}
+.s-proof li::before{content:""; flex:none; width:8px; height:8px; background:var(--b500); transform:translateY(-3px)}
+.s-proof .img{flex:0 0 640px; height:500px}
+
+/* 4 — Approach */
+.s-ring .wrap{flex:1; display:grid; grid-template-columns:600px 1fr; gap:72px; align-items:center; margin-top:8px}
+.ring{width:600px; height:auto}
+.ring .track{fill:none; stroke:rgba(201,211,250,.28); stroke-width:1.5}
+.ring .flow{fill:none; stroke:var(--acc); stroke-width:2.5; stroke-dasharray:4 10; stroke-linecap:round; animation:spin 40s linear infinite; transform-origin:300px 250px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.ring .flow{animation:none}}
+.ring .core{fill:var(--white)}
+.ring .core-t{fill:var(--b900); font-family:var(--display); font-size:26px; font-weight:800}
+.ring .node{fill:var(--b900); stroke:var(--b200); stroke-width:2}
+.ring .lbl{fill:var(--white); font-family:var(--display); font-size:20px; font-weight:800}
+.ring .sub{fill:var(--b200); font-family:var(--body); font-size:16px}
+.s-ring .pts{display:grid; gap:0}
+.s-ring .pts div{padding:24px 0; border-top:1px solid rgba(201,211,250,.22); display:grid; gap:6px}
+.s-ring .pts div:last-child{border-bottom:1px solid rgba(201,211,250,.22)}
+.s-ring .pts b{font-family:var(--display); font-weight:800; font-size:23px}
+.s-ring .pts span{font-size:19px; color:var(--b200); line-height:1.5}
+
+/* 5 — Journey */
+.path{list-style:none; padding:0; margin:auto 0 0; display:grid; grid-template-columns:repeat(5,1fr); gap:0; position:relative}
+.path::before{content:""; position:absolute; left:0; right:0; top:27px; height:2px; background:var(--b200)}
+.path li{position:relative; padding-right:32px; display:grid; gap:12px; align-content:start}
+.path .dot{position:relative; width:56px; height:56px; border-radius:50%; display:grid; place-items:center; font-family:var(--display); font-weight:800; font-size:22px; background:var(--white); border:2px solid var(--b500); color:var(--b700); margin-bottom:14px}
+.path li:nth-child(2) .dot{background:var(--b100)}
+.path li:nth-child(3) .dot{background:var(--b200)}
+.path li:nth-child(4) .dot{background:var(--b500); color:var(--white)}
+.path li.goal .dot{background:var(--acc); border-color:var(--acc); color:var(--white)}
+.path p{font-size:18px; line-height:1.5; color:var(--muted)}
+.s-path .note{margin-top:auto; display:flex; gap:28px; align-items:center; background:var(--b50); border-left:4px solid var(--acc); padding:28px 36px; font-size:22px; line-height:1.45}
+.s-path .note b{font-family:var(--display); font-weight:800}
+
+/* 6 — Platform */
+.s-plat .top{display:flex; justify-content:space-between; align-items:flex-end; gap:60px}
+.s-plat .top .lead{margin-top:0; max-width:520px; font-size:21px}
+.s-plat .shots{display:grid; grid-template-columns:1.7fr 1fr 1fr; gap:22px; margin-top:44px; height:330px}
+.s-plat .feats{display:grid; grid-template-columns:repeat(6,1fr); gap:0; margin-top:auto; border-top:1px solid var(--line)}
+.s-plat .feat{padding:24px 22px 0 0; display:grid; gap:6px; align-content:start}
+.s-plat .feat h3{font-size:19px}
+.s-plat .feat h3::before{content:""; display:block; width:22px; height:3px; background:var(--b500); margin-bottom:14px}
+.s-plat .feat:first-child h3::before{background:var(--acc)}
+.s-plat .feat p{font-size:16px; line-height:1.45; color:var(--muted)}
+.s-plat .langs{position:absolute; right:112px; top:92px; display:flex; gap:8px}
+.s-plat .langs span{font-size:14px; font-weight:600; padding:6px 14px; border-radius:999px; background:var(--white); border:1px solid var(--b200); color:var(--b700)}
+
+/* 7 — English */
+.s-eng{flex-direction:row; gap:72px; align-items:center}
+.s-eng .txt{flex:1 1 0}
+.s-eng ul{list-style:none; padding:0; margin:36px 0 0; display:grid; gap:14px}
+.s-eng li{display:flex; gap:16px; align-items:baseline; font-size:21px; color:var(--b100)}
+.s-eng li::before{content:""; flex:none; width:8px; height:8px; background:var(--acc); transform:translateY(-3px)}
+.s-eng .who{display:flex; gap:18px; align-items:center; margin-top:44px; padding-top:28px; border-top:1px solid rgba(201,211,250,.22)}
+.s-eng .av{width:60px; height:60px; border-radius:50%; background:var(--b500); display:grid; place-items:center; font-family:var(--display); font-weight:800; font-size:21px}
+.s-eng .who b{display:block; font-family:var(--display); font-weight:800; font-size:22px}
+.s-eng .who span{font-size:17px; color:var(--b200)}
+.s-eng .media{flex:0 0 700px; display:grid; gap:16px}
+.s-eng .media .main{height:394px}
+.s-eng .thumbs{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+.s-eng .thumbs .img{height:124px}
+.s-eng .thumbs .img .play{width:40px; height:40px; margin:-20px 0 0 -20px}
+.s-eng .thumbs .img .play::before{border-left-width:12px; border-top-width:7px; border-bottom-width:7px; margin-left:3px}
+.s-eng .thumbs .cap{font-size:13px; left:12px; bottom:10px}
+
+/* 8 — Invitation */
+.s-end .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:28px; margin-top:auto}
+.s-end .col{background:rgba(255,255,255,.07); border:1px solid rgba(201,211,250,.2); border-radius:12px; padding:30px 30px 34px; display:grid; gap:10px; align-content:start}
+.s-end .col .k{font-family:var(--display); font-weight:800; font-size:14px; letter-spacing:.14em; color:var(--acc)}
+.s-end .col p{font-size:18px; line-height:1.5; color:var(--b200)}
+.s-end .cta{margin-top:48px; display:flex; align-items:center; gap:36px}
+.s-end .cta a{display:inline-flex; align-items:center; gap:12px; background:var(--acc); color:var(--white); text-decoration:none; font-family:var(--display); font-weight:800; font-size:24px; padding:20px 34px; border-radius:999px}
+.s-end .cta a:hover{background:#FF9447}
+.s-end .cta p{font-size:21px; color:var(--b200)}
+
+/* ---------- Controls (outside the canvas) ---------- */
+.ctrl{position:fixed; z-index:20; right:12px; bottom:calc(12px + env(safe-area-inset-bottom, 0px)); display:flex; align-items:center; gap:6px; padding:5px; border-radius:999px; background:rgba(11,17,51,.72); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px)}
+.ctrl{transition:opacity .3s ease}
+body.idle .ctrl{opacity:0; pointer-events:none}
+.ctrl-lang,.ctrl-nav{display:flex; align-items:center; gap:6px}
+.ctrl button{border:0; background:transparent; color:#fff; font:600 13px/1 var(--body); letter-spacing:.06em; padding:9px 13px; border-radius:999px; cursor:pointer}
+.ctrl button:hover{background:rgba(255,255,255,.12)}
+.ctrl button[aria-pressed="true"]{background:#fff; color:var(--b900)}
+.ctrl .count{color:rgba(255,255,255,.8); font:600 13px/1 var(--body); font-variant-numeric:tabular-nums; min-width:52px; text-align:center}
+.ctrl .sep{width:1px; height:20px; background:rgba(255,255,255,.2); margin:0 4px}
+.ctrl-nav button{font-size:17px; padding:8px 14px}
+button:focus-visible,a:focus-visible{outline:3px solid var(--acc); outline-offset:3px}
+.bar{position:fixed; left:0; bottom:0; height:3px; background:var(--acc); z-index:19; transition:width .35s ease}
+
+/* Real photo loaded into a slot: hide the placeholder caption and glow */
+.img.has-img::after,.img.has-img .cap:not(.keep){display:none}
+.img.has-img .play{z-index:3}
+
+/* ---------- Phones and portrait screens: slides become a scrolling page ---------- */
+@media (max-width: 900px), (orientation: portrait){
+  body{overflow-x:hidden; overflow-y:auto; height:auto}
+  html{height:auto}
+  .viewport{position:static}
+  .stage{position:static; width:auto; height:auto; transform:none !important; overflow:visible; background:none}
+  .slide{position:relative; inset:auto; opacity:1; visibility:visible; transition:none; padding:64px 20px 56px}
+  .slide:not(.dark):not(.deep):not(.glow):not(.glow2):not(.soft){background:var(--white)}
+  .ctrl{top:calc(10px + env(safe-area-inset-top, 0px)); bottom:auto; right:10px}
+  .ctrl-nav,.bar{display:none}
+  .num-tag{display:none}
+
+  .eyebrow{font-size:12px; gap:10px; margin-bottom:16px}
+  .eyebrow::before{width:24px}
+  h1{font-size:44px}
+  h2{font-size:30px; line-height:1.14}
+  h3{font-size:19px}
+  .lead{font-size:17px; margin-top:16px}
+
+  .s-title{flex-direction:column; align-items:stretch; gap:36px; padding-top:0; padding-right:20px}
+  .s-title .img{order:-1; flex:none; align-self:auto; height:300px; margin:0 -20px}
+  .s-title .facts{flex-wrap:wrap; gap:18px 28px; margin-top:32px; padding-top:22px}
+  .s-title .facts b{font-size:18px}
+  .s-title .facts span{font-size:14px}
+
+  .s-chal .cols{grid-template-columns:1fr; gap:28px; margin:32px 0 0}
+  .s-chal .quote{font-size:21px; padding-left:18px}
+  .s-chal .items{gap:14px}
+  .s-chal .it{padding:20px 22px}
+  .s-chal .it p{font-size:16px}
+
+  .s-proof{flex-direction:column; align-items:stretch; gap:32px}
+  .s-proof .big b{font-size:130px}
+  .s-proof .big span{font-size:23px; padding-bottom:4px}
+  .s-proof ul{margin-top:26px; gap:12px}
+  .s-proof li{font-size:17px; gap:12px}
+  .s-proof .img{flex:none; height:220px}
+
+  .s-ring .wrap{grid-template-columns:1fr; gap:24px; margin-top:24px}
+  .ring{width:100%}
+  .ring .lbl{font-size:28px}
+  .ring .sub{font-size:22px}
+  .s-ring .pts div{padding:18px 0}
+  .s-ring .pts b{font-size:19px}
+  .s-ring .pts span{font-size:16px}
+
+  .path{grid-template-columns:1fr; margin:36px 0 0}
+  .path::before{left:21px; right:auto; top:8px; bottom:8px; width:2px; height:auto}
+  .path li{grid-template-columns:44px 1fr; column-gap:18px; row-gap:4px; padding:0 0 26px}
+  .path .dot{grid-row:span 2; width:44px; height:44px; font-size:17px; margin:0}
+  .path h3{align-self:center; padding-top:10px}
+  .path p{font-size:16px}
+  .s-path .note{margin-top:12px; padding:20px 22px; font-size:17px}
+
+  .s-plat .langs{position:static; flex-wrap:wrap; margin-bottom:24px}
+  .s-plat .langs span{font-size:12px; padding:5px 12px}
+  .s-plat .top{flex-direction:column; align-items:stretch; gap:0}
+  .s-plat .top .lead{margin-top:16px; font-size:17px}
+  .s-plat .shots{grid-template-columns:1fr 1fr; height:auto; gap:12px; margin-top:28px}
+  .s-plat .shots .img{height:150px}
+  .s-plat .shots .img:first-child{grid-column:1 / -1; height:200px}
+  .s-plat .feats{grid-template-columns:1fr 1fr; margin-top:28px; row-gap:6px}
+  .s-plat .feat{padding:20px 14px 0 0}
+  .s-plat .feat h3{font-size:17px}
+  .s-plat .feat p{font-size:14px}
+
+  .s-eng{flex-direction:column; align-items:stretch; gap:36px}
+  .s-eng ul{margin-top:24px; gap:12px}
+  .s-eng li{font-size:17px; gap:12px}
+  .s-eng .who{margin-top:28px; padding-top:22px}
+  .s-eng .av{width:48px; height:48px; font-size:17px}
+  .s-eng .who b{font-size:18px}
+  .s-eng .who span{font-size:14px}
+  .s-eng .media{flex:none; gap:10px}
+  .s-eng .media .main{height:220px}
+  .s-eng .thumbs{gap:10px}
+  .s-eng .thumbs .img{height:76px}
+  .s-eng .thumbs .cap{display:none}
+
+  .s-end .cols{grid-template-columns:1fr; gap:14px; margin-top:32px}
+  .s-end .col{padding:22px 22px 24px}
+  .s-end .col p{font-size:16px}
+  .s-end .cta{flex-direction:column; align-items:flex-start; gap:18px; margin-top:32px}
+  .s-end .cta a{font-size:20px; padding:16px 28px}
+  .s-end .cta p{font-size:17px}
+  .img .cap{font-size:13px; left:14px; bottom:12px}
+}
+@media (max-width: 380px){
+  h1{font-size:38px}
+  h2{font-size:27px}
+  .s-proof .big b{font-size:110px}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-photo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.4"/></symbol>
+  <symbol id="i-screen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></symbol>
+</svg>
+
+<div class="ctrl">
+  <div class="ctrl-lang" role="group" aria-label="Language">
+    <button type="button" id="btn-ru" data-l="ru" aria-pressed="true">RU</button>
+    <button type="button" id="btn-en" data-l="en" aria-pressed="false">EN</button>
+  </div>
+  <div class="ctrl-nav">
+    <span class="sep" aria-hidden="true"></span>
+    <button type="button" id="prev" aria-label="Previous slide">←</button>
+    <span class="count" id="count">1 / 8</span>
+    <button type="button" id="next" aria-label="Next slide">→</button>
+  </div>
+</div>
+<div class="bar" id="bar"></div>
+
+<div class="viewport" id="viewport">
+<div class="stage" id="stage">
+
+<!-- 1 -->
+<section class="slide s-title glow on" id="s1">
+  <div class="txt">
+    <p class="eyebrow"><span class="ru">Как мы ведём людей в церковь</span><span class="en">How we lead people to church</span></p>
+    <h1 class="ru">Путь человека <span class="acc">от А до Я</span></h1>
+    <h1 class="en">A path <span class="acc">from A to Z</span></h1>
+    <p class="lead ru">От первого видео до своей церкви. Разные инструменты, одна тема и живые люди рядом на каждом шаге.</p>
+    <p class="lead en">From the first video to a local church. Many tools, one message, and real people alongside at every step.</p>
+    <div class="facts">
+      <div><b>3 <span class="ru" style="font-size:inherit;color:inherit">года</span><span class="en" style="font-size:inherit;color:inherit">years</span></b><span class="ru">«Сложных текстов нет»</span><span class="en">“No Difficult Texts”</span></div>
+      <div><b>OnBible</b><span class="ru">платформа для изучения Библии</span><span class="en">Bible study platform</span></div>
+      <div><b>EN</b><span class="ru">новый проект на английском</span><span class="en">new English project</span></div>
+    </div>
+  </div>
+  <div class="img" data-slot="hero-studio"><span class="cap"><svg><use href="#i-photo"/></svg><span class="ru">Фото: студия, запись с Кириллом</span><span class="en">Photo: studio recording with Kirill</span></span></div>
+</section>
+
+<!-- 2 -->
+<section class="slide s-chal" id="s2">
+  <span class="num-tag">02</span>
+  <p class="eyebrow"><span class="ru">С чем мы работаем</span><span class="en">The challenge</span></p>
+  <h2 class="ru">Новый взгляд на Библию не приходит за один разговор</h2>
+  <h2 class="en">A fresh look at the Bible rarely comes from one conversation</h2>
+  <div class="cols">
+    <p class="quote ru">Человек годами живёт в своей среде. Друзья, привычная община, знакомые трактовки. Посмотреть на Писание по-новому ему трудно.</p>
+    <p class="quote en">People live for years inside their own circle — friends, their home church, familiar interpretations. Seeing Scripture with fresh eyes is hard.</p>
+    <div class="items">
+      <div class="it"><h3 class="ru">Мысль доходит через повторение</h3><h3 class="en">Ideas land through repetition</h3>
+        <p class="ru">Человек встречает её снова и снова. В видео, в уроке, в личном разговоре.</p>
+        <p class="en">People meet the same idea again and again — in a video, a lesson, a personal conversation.</p></div>
+      <div class="it"><h3 class="ru">Поэтому мы строим путь</h3><h3 class="en">So we build a path</h3>
+        <p class="ru">Наша цель — чтобы глубокое изучение Библии стало частью обычной жизни христианина. Сложное мы делаем доступным.</p>
+        <p class="en">Our goal is to make deep Bible study part of everyday Christian life. We make the complex accessible.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide s-proof soft" id="s3">
+  <span class="num-tag">03</span>
+  <div class="txt">
+    <p class="eyebrow"><span class="ru">Путь уже работает</span><span class="en">Proven in practice</span></p>
+    <div class="big"><b>3</b><span class="ru">года приводим людей к Богу</span><span class="en">years of leading people to God</span></div>
+    <p class="lead ru">Русскоязычный проект «Сложных текстов нет» идёт по этому пути около трёх лет. Люди приходят к Богу и в церковь.</p>
+    <p class="lead en">Our Russian-language project “No Difficult Texts” has followed this path for about three years. People come to God and into the church.</p>
+    <ul>
+      <li><span class="ru">Видео разбирают трудные места Писания</span><span class="en">Videos explain difficult passages of Scripture</span></li>
+      <li><span class="ru">Курсы на платформе OnBible углубляют тему</span><span class="en">Courses on the OnBible platform go deeper</span></li>
+      <li><span class="ru">Команда на связи и помогает найти церковь</span><span class="en">A team stays in touch and helps find a church</span></li>
+    </ul>
+  </div>
+  <div class="img" data-slot="stn-channel"><span class="cap"><svg><use href="#i-screen"/></svg><span class="ru">Скрин канала «Сложных текстов нет»</span><span class="en">Screenshot: “No Difficult Texts” channel</span></span></div>
+</section>
+
+<!-- 4 -->
+<section class="slide s-ring glow2" id="s4">
+  <span class="num-tag">04</span>
+  <p class="eyebrow"><span class="ru">Наш подход</span><span class="en">Our approach</span></p>
+  <h2 class="ru">Одна тема проходит через разные инструменты</h2>
+  <h2 class="en">One message through many tools</h2>
+  <div class="wrap">
+    <svg class="ring" viewBox="-60 0 720 500" role="img" aria-label="One theme in the centre, five tools around it">
+      <circle class="track" cx="300" cy="250" r="175"/>
+      <circle class="flow" cx="300" cy="250" r="175"/>
+      <circle class="core" cx="300" cy="250" r="78"/>
+      <g class="ru"><text class="core-t" x="300" y="246" text-anchor="middle">Одна</text><text class="core-t" x="300" y="276" text-anchor="middle">тема</text></g>
+      <g class="en"><text class="core-t" x="300" y="246" text-anchor="middle">One</text><text class="core-t" x="300" y="276" text-anchor="middle">message</text></g>
+      <circle class="node" cx="300" cy="75" r="11"/>
+      <circle class="node" cx="466" cy="196" r="11"/>
+      <circle class="node" cx="403" cy="392" r="11"/>
+      <circle class="node" cx="197" cy="392" r="11"/>
+      <circle class="node" cx="134" cy="196" r="11"/>
+      <g class="ru">
+        <text class="lbl" x="300" y="44" text-anchor="middle">Видео</text>
+        <text class="lbl" x="488" y="192">Курсы</text><text class="sub" x="488" y="220">на OnBible</text>
+        <text class="lbl" x="424" y="426">Вопросы</text><text class="sub" x="424" y="454">и наставник</text>
+        <text class="lbl" x="176" y="426" text-anchor="end">Личная</text><text class="sub" x="176" y="454" text-anchor="end">связь</text>
+        <text class="lbl" x="112" y="192" text-anchor="end">Помощь</text><text class="sub" x="112" y="220" text-anchor="end">найти церковь</text>
+      </g>
+      <g class="en">
+        <text class="lbl" x="300" y="44" text-anchor="middle">Videos</text>
+        <text class="lbl" x="488" y="192">Courses</text><text class="sub" x="488" y="220">on OnBible</text>
+        <text class="lbl" x="424" y="426">Questions</text><text class="sub" x="424" y="454">&amp; a mentor</text>
+        <text class="lbl" x="176" y="426" text-anchor="end">Personal</text><text class="sub" x="176" y="454" text-anchor="end">contact</text>
+        <text class="lbl" x="112" y="192" text-anchor="end">Finding</text><text class="sub" x="112" y="220" text-anchor="end">a church</text>
+      </g>
+    </svg>
+    <div class="pts">
+      <div><b class="ru">Каждый инструмент ведёт дальше</b><b class="en">Every tool leads to the next</b>
+        <span class="ru">Видео даёт ссылку на курс. Курс ведёт к вопросам и наставнику.</span>
+        <span class="en">A video links to a course. A course leads to questions and a mentor.</span></div>
+      <div><b class="ru">Человек остаётся в одной среде</b><b class="en">People stay in one environment</b>
+        <span class="ru">Он переходит от формата к формату и не теряет нить.</span>
+        <span class="en">They move between formats without losing the thread.</span></div>
+      <div><b class="ru">Рядом всегда живой человек</b><b class="en">A real person is always there</b>
+        <span class="ru">Личная связь с Андреем и командой идёт через весь путь.</span>
+        <span class="en">Personal contact with Andrey and the team runs through the whole path.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide s-path" id="s5">
+  <span class="num-tag">05</span>
+  <p class="eyebrow"><span class="ru">Путь человека</span><span class="en">The journey</span></p>
+  <h2 class="ru">Как человек приходит к желанию найти церковь</h2>
+  <h2 class="en">How people come to want a church of their own</h2>
+  <ol class="path">
+    <li><span class="dot">1</span><h3 class="ru">Видео</h3><h3 class="en">Video</h3>
+      <p class="ru">Встречает тему на канале. В описании — ссылка на курс.</p><p class="en">Finds a topic on the channel. The description links to a course.</p></li>
+    <li><span class="dot">2</span><h3 class="ru">Курс на OnBible</h3><h3 class="en">OnBible course</h3>
+      <p class="ru">Изучает тему по Писанию в своём темпе.</p><p class="en">Studies the topic in Scripture at their own pace.</p></li>
+    <li><span class="dot">3</span><h3 class="ru">Вопросы</h3><h3 class="en">Questions</h3>
+      <p class="ru">Спрашивает богослова и получает наставника.</p><p class="en">Asks a theologian and gets a mentor.</p></li>
+    <li><span class="dot">4</span><h3 class="ru">Личная связь</h3><h3 class="en">Personal contact</h3>
+      <p class="ru">Общается с Андреем и командой лично.</p><p class="en">Talks with Andrey and the team personally.</p></li>
+    <li class="goal"><span class="dot">✓</span><h3 class="ru">Своя церковь</h3><h3 class="en">A local church</h3>
+      <p class="ru">Люди на связи помогают найти общину рядом.</p><p class="en">Our team helps them find a congregation nearby.</p></li>
+  </ol>
+  <p class="note ru"><span><b>Желание искать церковь рождается у человека само.</b> Это итог пути, который он прошёл через разные инструменты.</span></p>
+  <p class="note en"><span><b>The desire to find a church grows on its own.</b> It is the fruit of a journey through many tools.</span></p>
+</section>
+
+<!-- 6 -->
+<section class="slide s-plat soft" id="s6">
+  <div class="langs"><span>English</span><span>Русский</span><span>Українська</span></div>
+  <div class="top">
+    <div>
+      <p class="eyebrow"><span class="ru">Платформа OnBible</span><span class="en">The OnBible platform</span></p>
+      <h2 class="ru">Мы учим людей изучать Библию самостоятельно</h2>
+      <h2 class="en">We teach people to study the Bible for themselves</h2>
+    </div>
+    <p class="lead ru">Бесплатная платформа, где собран весь путь. Её уже использует Андрей в своих разборах Писания.</p>
+    <p class="lead en">A free platform that holds the whole journey. Andrey already uses it in his Scripture studies.</p>
+  </div>
+  <div class="shots">
+    <div class="img" data-slot="ob-main"><span class="cap"><svg><use href="#i-screen"/></svg><span class="ru">Скрин: главная OnBible</span><span class="en">Screenshot: OnBible home</span></span></div>
+    <div class="img" data-slot="ob-course"><span class="cap"><svg><use href="#i-screen"/></svg><span class="ru">Скрин: курс</span><span class="en">Screenshot: a course</span></span></div>
+    <div class="img" data-slot="ob-bible"><span class="cap"><svg><use href="#i-screen"/></svg><span class="ru">Скрин: режим презентации</span><span class="en">Screenshot: presentation mode</span></span></div>
+  </div>
+  <div class="feats">
+    <div class="feat"><h3 class="ru">Библия</h3><h3 class="en">Bible</h3><p class="ru">Чтение, поиск, работа с текстом</p><p class="en">Reading, search, study tools</p></div>
+    <div class="feat"><h3 class="ru">Курсы</h3><h3 class="en">Courses</h3><p class="ru">Как изучать Библию, книги и темы</p><p class="en">How to study, books and topics</p></div>
+    <div class="feat"><h3 class="ru">Наставники</h3><h3 class="en">Mentors</h3><p class="ru">Вопросы богослову и сопровождение</p><p class="en">Ask a theologian, get guidance</p></div>
+    <div class="feat"><h3 class="ru">Заметки</h3><h3 class="en">Notes</h3><p class="ru">Свои выводы рядом с текстом</p><p class="en">Your insights next to the text</p></div>
+    <div class="feat"><h3 class="ru">Презентация</h3><h3 class="en">Presenting</h3><p class="ru">Стихи на экране во время урока</p><p class="en">Verses on screen while teaching</p></div>
+    <div class="feat"><h3 class="ru">Видео и курсы</h3><h3 class="en">Video + courses</h3><p class="ru">Каждое видео ведёт на курс</p><p class="en">Every video leads to a course</p></div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide s-eng glow" id="s7">
+  <span class="num-tag">07</span>
+  <div class="txt">
+    <p class="eyebrow"><span class="ru">Новый проект</span><span class="en">What’s next</span></p>
+    <h2 class="ru">Тот же путь&nbsp;— теперь <span class="acc">на английском</span></h2>
+    <h2 class="en">The same path&nbsp;— now <span class="acc">in English</span></h2>
+    <p class="lead ru">Мы создаём англоязычный аналог «Сложных текстов нет». В студии уже идут записи видео для англоязычной аудитории.</p>
+    <p class="lead en">We are building an English counterpart to “No Difficult Texts”. Studio recordings for an English-speaking audience are underway.</p>
+    <ul>
+      <li><span class="ru">Видео с исследованием Библии на английском</span><span class="en">Bible study videos in English</span></li>
+      <li><span class="ru">Платформа OnBible на английском уже работает</span><span class="en">The OnBible platform already works in English</span></li>
+      <li><span class="ru">Подача под новую аудиторию, путь проверенный</span><span class="en">A fresh style for a new audience on a proven path</span></li>
+    </ul>
+    <div class="who">
+      <span class="av">КА</span>
+      <div><b class="ru">Кирилл Андреев</b><b class="en">Kirill Andreev</b>
+        <span class="ru">лицо англоязычного проекта</span><span class="en">host of the English project</span></div>
+    </div>
+  </div>
+  <div class="media">
+    <div class="img main" data-slot="kirill-studio"><span class="cap"><svg><use href="#i-photo"/></svg><span class="ru">Фото: Кирилл в студии</span><span class="en">Photo: Kirill in the studio</span></span></div>
+    <div class="thumbs">
+      <div class="img" data-slot="kirill-v1"><span class="play"></span><span class="cap ru">Видео 1</span><span class="cap en">Video 1</span></div>
+      <div class="img" data-slot="kirill-v2"><span class="play"></span><span class="cap ru">Видео 2</span><span class="cap en">Video 2</span></div>
+      <div class="img" data-slot="kirill-v3"><span class="play"></span><span class="cap ru">Видео 3</span><span class="cap en">Video 3</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide s-end glow2" id="s8">
+  <span class="num-tag">08</span>
+  <p class="eyebrow"><span class="ru">Приглашение</span><span class="en">Join us</span></p>
+  <h2 class="ru">Мы уже делаем это у вас. <span class="acc">Подключайтесь</span></h2>
+  <h2 class="en">We’re already doing this with you. <span class="acc">Join in</span></h2>
+  <div class="cols">
+    <div class="col"><span class="k ru">ПРОВЕРЕНО</span><span class="k en">PROVEN</span><h3 class="ru">3 года на русском</h3><h3 class="en">3 years in Russian</h3>
+      <p class="ru">Путь уже приводит людей к Богу и в церковь.</p><p class="en">The path already brings people to God and to church.</p></div>
+    <div class="col"><span class="k ru">ЗАПУСКАЕТСЯ</span><span class="k en">LAUNCHING</span><h3 class="ru">Проект на английском</h3><h3 class="en">An English project</h3>
+      <p class="ru">С Кириллом Андреевым для англоязычной аудитории.</p><p class="en">With Kirill Andreev for English-speaking audiences.</p></div>
+    <div class="col"><span class="k ru">ГОТОВО</span><span class="k en">READY</span><h3 class="ru">Платформа OnBible</h3><h3 class="en">The OnBible platform</h3>
+      <p class="ru">Берите и используйте. Остальной путь мы поддержим.</p><p class="en">Take it and use it. We’ll support the rest of the journey.</p></div>
+  </div>
+  <div class="cta">
+    <a href="https://on-bible.com" target="_blank" rel="noopener">on-bible.com ↗</a>
+    <p class="ru">Вместе мы проведём по этому пути гораздо больше людей.</p>
+    <p class="en">Together we can lead many more people along this path.</p>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script>
+(function(){
+  var W=1600, H=900;
+  var stage=document.getElementById('stage');
+  var flowMQ=window.matchMedia('(max-width: 900px), (orientation: portrait)');
+  function isFlow(){ return flowMQ.matches; }
+  function fit(){
+    var s=Math.min(window.innerWidth/W, window.innerHeight/H);
+    stage.style.transform='translate(-50%,-50%) scale('+s+')';
+  }
+  window.addEventListener('resize', fit); fit();
+
+  // Photos: drop img/<slot>.jpg (or .png/.webp) next to this file and it replaces the placeholder
+  document.querySelectorAll('.img[data-slot]').forEach(function(box){
+    var exts=['jpg','png','webp'], k=0;
+    (function tryNext(){
+      if(k>=exts.length) return;
+      var im=new Image(); im.alt=''; im.decoding='async';
+      im.onload=function(){ box.insertBefore(im, box.firstChild); box.classList.add('has-img'); };
+      im.onerror=function(){ k++; tryNext(); };
+      im.src='img/'+box.dataset.slot+'.'+exts[k];
+    })();
+  });
+
+  var body=document.body;
+  function setLang(l){
+    body.classList.remove('lang-ru','lang-en'); body.classList.add('lang-'+l);
+    document.documentElement.lang=l;
+    ['ru','en'].forEach(function(x){ document.getElementById('btn-'+x).setAttribute('aria-pressed', x===l?'true':'false'); });
+    try{ localStorage.setItem('ob-lang', l); }catch(e){}
+  }
+  var lang='ru';
+  try{ var sl=localStorage.getItem('ob-lang'); if(sl==='en'||sl==='ru') lang=sl; }catch(e){}
+  if(location.hash==='#en') lang='en'; if(location.hash==='#ru') lang='ru';
+  setLang(lang);
+  document.querySelectorAll('.ctrl-lang button').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.l); }); });
+
+  var slides=[].slice.call(document.querySelectorAll('.slide')), cur=0;
+  var count=document.getElementById('count'), bar=document.getElementById('bar');
+  function show(i){
+    i=Math.max(0, Math.min(slides.length-1, i));
+    slides[cur].classList.remove('on'); cur=i; slides[cur].classList.add('on');
+    count.textContent=(cur+1)+' / '+slides.length;
+    bar.style.width=((cur+1)/slides.length*100)+'%';
+  }
+  var m=/^#s(\d+)$/.exec(location.hash); show(m ? (+m[1]-1) : 0);
+  document.getElementById('prev').addEventListener('click', function(){ show(cur-1); });
+  document.getElementById('next').addEventListener('click', function(){ show(cur+1); });
+  document.addEventListener('keydown', function(e){
+    if(isFlow()) return;
+    if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].indexOf(e.key)>-1 && !(e.target.closest && e.target.closest('a,button'))){ e.preventDefault(); show(cur+1); }
+    else if(['ArrowRight','ArrowDown','PageDown'].indexOf(e.key)>-1){ e.preventDefault(); show(cur+1); }
+    else if(['ArrowLeft','ArrowUp','PageUp'].indexOf(e.key)>-1){ e.preventDefault(); show(cur-1); }
+    else if(e.key==='Home'){ show(0); } else if(e.key==='End'){ show(slides.length-1); }
+  });
+  var x0=null, y0=null;
+  document.addEventListener('touchstart', function(e){ x0=e.touches[0].clientX; y0=e.touches[0].clientY; }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if(x0===null || isFlow()) return;
+    var dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0;
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)) show(cur+(dx<0?1:-1));
+    x0=null;
+  }, {passive:true});
+  // Hide controls while presenting; any mouse move or key brings them back
+  var idleT;
+  function wake(){ body.classList.remove('idle'); clearTimeout(idleT); idleT=setTimeout(function(){ if(!isFlow()) body.classList.add('idle'); }, 2500); }
+  ['mousemove','keydown','touchstart'].forEach(function(ev){ document.addEventListener(ev, wake, {passive:true}); });
+  wake();
+
+  var wheelLock=false;
+  document.addEventListener('wheel', function(e){
+    if(wheelLock || isFlow() || Math.abs(e.deltaY)<30) return;
+    wheelLock=true; show(cur+(e.deltaY>0?1:-1)); setTimeout(function(){ wheelLock=false; }, 700);
+  }, {passive:true});
+})();
+</script>
+</body>
+</html>
